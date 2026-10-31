@@ -1,0 +1,15 @@
+config_version=5
+
+[application]
+
+config/name="Porto Sereno"
+run/main_scene="res://src/test_levels/gray_ground.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+
+[physics]
+
+3d/physics_engine="Jolt Physics"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"

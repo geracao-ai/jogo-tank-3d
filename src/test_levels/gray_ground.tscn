@@ -1,0 +1,100 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="PackedScene" path="res://src/vehicle/tank.tscn" id="1"]
+
+[sub_resource type="BoxShape3D" id="ground_shape"]
+size = Vector3(200, 1, 200)
+
+[sub_resource type="BoxMesh" id="ground_mesh"]
+size = Vector3(200, 1, 200)
+
+[sub_resource type="StandardMaterial3D" id="ground_mat"]
+albedo_color = Color(0.45, 0.45, 0.45, 1)
+
+[sub_resource type="BoxMesh" id="ref_mesh"]
+size = Vector3(3, 3, 3)
+
+[sub_resource type="StandardMaterial3D" id="ref_mat"]
+albedo_color = Color(0.7, 0.7, 0.72, 1)
+
+[sub_resource type="Environment" id="env"]
+background_mode = 1
+background_color = Color(0.6, 0.65, 0.7, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.7, 0.7, 0.7, 1)
+
+[node name="GrayGround" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("env")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.7071, 0.7071, 0, -0.7071, 0.7071, 0, 10, 0)
+
+; TEMPORARY fixed camera so the scene renders. The real follow camera is story 002.
+[node name="TempFixedCamera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.8192, 0.5736, 0, -0.5736, 0.8192, 0, 32, 28)
+fov = 60.0
+far = 300.0
+
+[node name="Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("ground_shape")
+
+[node name="Mesh" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("ground_mesh")
+surface_material_override/0 = SubResource("ground_mat")
+
+[node name="Tank" parent="." instance=ExtResource("1")]
+
+[node name="RefBox0" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 1.5, -10)
+mesh = SubResource("ref_mesh")
+surface_material_override/0 = SubResource("ref_mat")
+
+[node name="RefBox1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1.5, -14)
+mesh = SubResource("ref_mesh")
+surface_material_override/0 = SubResource("ref_mat")
+
+[node name="RefBox2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 1.5, 6)
+mesh = SubResource("ref_mesh")
+surface_material_override/0 = SubResource("ref_mat")
+
+[node name="RefBox3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 1.5, 8)
+mesh = SubResource("ref_mesh")
+surface_material_override/0 = SubResource("ref_mat")
+
+[node name="RefBox4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -25)
+mesh = SubResource("ref_mesh")
+surface_material_override/0 = SubResource("ref_mat")
+
+[node name="RefBox5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.5, 18)
+mesh = SubResource("ref_mesh")
+surface_material_override/0 = SubResource("ref_mat")
+
+[node name="RefBox6" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 1.5, 22)
+mesh = SubResource("ref_mesh")
+surface_material_override/0 = SubResource("ref_mat")
+
+[node name="RefBox7" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 1.5, -18)
+mesh = SubResource("ref_mesh")
+surface_material_override/0 = SubResource("ref_mat")
+
+[node name="RefBox8" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 1.5, -8)
+mesh = SubResource("ref_mesh")
+surface_material_override/0 = SubResource("ref_mat")
+
+[node name="RefBox9" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 1.5, 10)
+mesh = SubResource("ref_mesh")
+surface_material_override/0 = SubResource("ref_mat")

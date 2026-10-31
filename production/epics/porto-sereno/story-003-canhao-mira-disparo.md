@@ -1,12 +1,12 @@
 # Story 003: Canhão com mira e disparo
 
 > **Epic**: porto-sereno
-> **Status**: Ready
+> **Status**: Complete
 > **Layer**: N/A (minimal)
 > **Type**: Integration
 > **Estimate**: M
 > **Manifest Version**: N/A (minimal — no control manifest)
-> **Last Updated**: [set by /dev-story when implementation begins]
+> **Last Updated**: 2026-10-31
 
 ## Context
 
@@ -55,11 +55,13 @@
 ## Files
 
 - `src/vehicle/cannon.gd`
-- `src/vehicle/projectile.gd`
+- `src/vehicle/cannon_tuning.gd`
 - `src/vehicle/cannon_tuning.tres`
-- `tests/integration/cannon/cannon_fire_test.gd`
-
----
+- `src/vehicle/projectile.gd`
+- `src/vehicle/projectile.tscn`
+- `src/ui/crosshair.gd`
+- `src/vehicle/tank.tscn`
+- `src/test_levels/gray_ground.tscn`
 
 ## QA Test Cases
 
@@ -80,3 +82,10 @@
 
 - Depends on: `production/epics/porto-sereno/story-001-tanque-dirigivel.md`, `production/epics/porto-sereno/story-002-camera-terceira-pessoa.md`
 - Unlocks: `production/epics/porto-sereno/story-004-destruicao-em-estagios.md`
+
+## Completion Notes
+**Completed**: 2026-10-31
+**Criteria**: 8/8 passing. AC-1, AC-2, AC-3, AC-4 and AC-6 confirmed by the developer's hands-on run. AC-5 (impact signal) and AC-8 (no fire while paused) were verified only by a scripted run in the session that was not kept in the repo; there is no pause screen to test AC-8 by hand and no listener yet for AC-5.
+**Deviations**: ADVISORY — no automated test protects AC-5 and AC-8 (waived at qa.level minimal); the `RefBox` meshes in `gray_ground.tscn` have no collision, so shells pass through them; the crosshair exists only in `gray_ground.tscn` and the city scene (story 005) needs it too; `draw_line` renders thinner in 4.7, so the crosshair `thickness` may need raising. `cannon_tuning.gd`, `projectile.tscn`, `crosshair.gd` and the two scene edits were beyond the planned Files list.
+**Test Evidence**: waived at qa.level minimal; screenshots in `production/qa/evidence/story-003-canhao-mira-disparo/`
+**Reviewed by**: self, no independent review

@@ -1,7 +1,10 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://src/vehicle/tank.gd" id="1"]
 [ext_resource type="Resource" path="res://src/vehicle/tank_tuning.tres" id="2"]
+[ext_resource type="Script" path="res://src/vehicle/cannon.gd" id="3"]
+[ext_resource type="Resource" path="res://src/vehicle/cannon_tuning.tres" id="4"]
+[ext_resource type="PackedScene" path="res://src/vehicle/projectile.tscn" id="5"]
 
 [sub_resource type="BoxShape3D" id="shape"]
 size = Vector3(2.4, 1.0, 4.0)
@@ -11,6 +14,9 @@ size = Vector3(2.4, 0.9, 4.0)
 
 [sub_resource type="BoxMesh" id="turret_mesh"]
 size = Vector3(1.4, 0.6, 1.6)
+
+[sub_resource type="BoxMesh" id="barrel_mesh"]
+size = Vector3(0.2, 0.2, 2.0)
 
 [sub_resource type="StandardMaterial3D" id="mat"]
 albedo_color = Color(0.3, 0.45, 0.25, 1)
@@ -28,7 +34,23 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 mesh = SubResource("hull_mesh")
 surface_material_override/0 = SubResource("mat")
 
-[node name="Turret" type="MeshInstance3D" parent="."]
+[node name="Cannon" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0.3)
+script = ExtResource("3")
+tuning = ExtResource("4")
+projectile_scene = ExtResource("5")
+
+[node name="Turret" type="MeshInstance3D" parent="Cannon"]
 mesh = SubResource("turret_mesh")
 surface_material_override/0 = SubResource("mat")
+
+[node name="Pitch" type="Node3D" parent="Cannon"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.8)
+
+[node name="Barrel" type="MeshInstance3D" parent="Cannon/Pitch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+mesh = SubResource("barrel_mesh")
+surface_material_override/0 = SubResource("mat")
+
+[node name="Muzzle" type="Marker3D" parent="Cannon/Pitch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.1)

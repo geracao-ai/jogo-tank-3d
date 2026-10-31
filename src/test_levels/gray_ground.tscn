@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="PackedScene" path="res://src/vehicle/tank.tscn" id="1"]
 [ext_resource type="Script" path="res://src/camera/follow_camera.gd" id="2"]
 [ext_resource type="Resource" path="res://src/camera/follow_camera_tuning.tres" id="3"]
+[ext_resource type="Script" path="res://src/ui/crosshair.gd" id="4"]
 
 [sub_resource type="BoxShape3D" id="ground_shape"]
 size = Vector3(200, 1, 200)
@@ -40,6 +41,18 @@ far = 300.0
 script = ExtResource("2")
 target = NodePath("../Tank")
 tuning = ExtResource("3")
+
+[node name="Hud" type="CanvasLayer" parent="."]
+
+[node name="Crosshair" type="Control" parent="Hud"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4")
 
 [node name="Ground" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)

@@ -87,8 +87,8 @@
 
 ## Completion Notes
 **Completed**: 2026-10-31 — closed over a BLOCKED verdict, by the user's explicit choice ("Fechar mesmo assim, aceitando as lacunas")
-**Criteria**: 2/8 covered (AC-6 data-driven tuning; AC-7 gray scene, seen in `01-cena-tanque00000059.png`). Untested criteria: AC-1 to AC-5 and AC-8 (accelerate, brake, turn, reverse, weight, keyboard/gamepad). Their only basis is the /dev-story simulated-input measurement (12 m/s in 2 s, 10→0 m/s braking, 5 m/s reverse, 76° turn in 1.5 s); nobody has driven it with real keys or a gamepad.
-**Deviations**: ADVISORY — `physics/3d/physics_engine` set to Jolt in `project.godot`; `src/vehicle/tank_tuning.gd` added beyond the planned Files list. Missing: Visual/Feel sign-off `production/qa/evidence/story-001-tanque-dirigivel-evidence.md` was never created.
-**Test Evidence**: screenshots `production/qa/evidence/story-001-tanque-dirigivel/01-cena-tanque00000059.png` and `02-tanque-em-curva.png`; tests waived at qa.level minimal
+**Criteria**: 7/8 passing, AC-8 partial (keyboard driven by hand; gamepad use not recorded). Updated 2026-10-31 after the developer's hands-on run ("Eu rodei e gostei", "001 tb testado").
+**Deviations**: ADVISORY — `physics/3d/physics_engine` set to Jolt in `project.godot`; `src/vehicle/tank_tuning.gd` added beyond the planned Files list.
+**Test Evidence**: sign-off `production/qa/evidence/story-001-tanque-dirigivel-evidence.md`; screenshots `production/qa/evidence/story-001-tanque-dirigivel/01-cena-tanque00000059.png` and `02-tanque-em-curva.png` predate story 002's camera change to `gray_ground.tscn`; tests waived at qa.level minimal
 **Reviewed by**: self, no independent review
-**Feel**: DEFERRED — needs a hands-on drive (`godot --path .`); tuning values in `tank_tuning.tres` are a first guess.
+**Feel**: approved by the developer on the hands-on run; tuning values in `tank_tuning.tres` unchanged.

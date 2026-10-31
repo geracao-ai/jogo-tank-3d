@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="FollowCameraTuning" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/camera/follow_camera_tuning.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+distance = 9.0
+height = 5.0
+look_height = 1.0
+look_ahead = 6.0
+position_smoothing = 6.0
+rotation_smoothing = 3.5
+min_camera_y = 1.0

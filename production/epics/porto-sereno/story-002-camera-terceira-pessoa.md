@@ -1,12 +1,12 @@
 # Story 002: Câmera em terceira pessoa
 
 > **Epic**: porto-sereno
-> **Status**: Ready
+> **Status**: Complete
 > **Layer**: N/A (minimal)
 > **Type**: Visual/Feel
 > **Estimate**: S
 > **Manifest Version**: N/A (minimal — no control manifest)
-> **Last Updated**: [set by /dev-story when implementation begins]
+> **Last Updated**: 2026-10-31
 
 ## Context
 
@@ -52,9 +52,9 @@
 ## Files
 
 - `src/camera/follow_camera.gd`
+- `src/camera/follow_camera_tuning.gd`
 - `src/camera/follow_camera_tuning.tres`
-
----
+- `src/test_levels/gray_ground.tscn`
 
 ## QA Test Cases
 
@@ -75,3 +75,10 @@
 
 - Depends on: `production/epics/porto-sereno/story-001-tanque-dirigivel.md`
 - Unlocks: `production/epics/porto-sereno/story-003-canhao-mira-disparo.md`
+
+## Completion Notes
+**Completed**: 2026-10-31
+**Criteria**: 5/6 passing (AC-4 walls DEFERRED to `production/epics/porto-sereno/story-005-cidade-costeira-completa.md`, which carries that criterion; the ground half passes)
+**Deviations**: ADVISORY — camera runs before the tank in the scene tree and follows with a one-tick lag, while the comment at `src/camera/follow_camera.gd:25` says otherwise; `src/camera/follow_camera_tuning.gd` added beyond the planned Files list.
+**Test Evidence**: `production/qa/evidence/story-002-camera-terceira-pessoa-evidence.md` and the screenshots in `production/qa/evidence/story-002-camera-terceira-pessoa/`; tests waived at qa.level minimal
+**Reviewed by**: self, no independent review

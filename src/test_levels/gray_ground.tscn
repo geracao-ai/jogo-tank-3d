@@ -1,6 +1,8 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="PackedScene" path="res://src/vehicle/tank.tscn" id="1"]
+[ext_resource type="Script" path="res://src/camera/follow_camera.gd" id="2"]
+[ext_resource type="Resource" path="res://src/camera/follow_camera_tuning.tres" id="3"]
 
 [sub_resource type="BoxShape3D" id="ground_shape"]
 size = Vector3(200, 1, 200)
@@ -31,11 +33,13 @@ environment = SubResource("env")
 [node name="Sun" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.7071, 0.7071, 0, -0.7071, 0.7071, 0, 10, 0)
 
-; TEMPORARY fixed camera so the scene renders. The real follow camera is story 002.
-[node name="TempFixedCamera" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.8192, 0.5736, 0, -0.5736, 0.8192, 0, 32, 28)
+[node name="FollowCamera" type="Camera3D" parent="." node_paths=PackedStringArray("target")]
+transform = Transform3D(1, 0, 0, 0, 0.8192, 0.5736, 0, -0.5736, 0.8192, 0, 5, 9)
 fov = 60.0
 far = 300.0
+script = ExtResource("2")
+target = NodePath("../Tank")
+tuning = ExtResource("3")
 
 [node name="Ground" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="TankTuning" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/vehicle/tank_tuning.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+acceleration = 6.0
+max_forward_speed = 14.0
+max_reverse_speed = 5.0
+brake_deceleration = 16.0
+coast_deceleration = 4.0
+turn_rate_standstill = 70.0
+turn_rate_full_speed = 30.0
+turn_response = 5.0

@@ -59,7 +59,7 @@ def ambient():
             (0.5 + 0.5 * math.sin(2 * math.pi * 30 * t))
         env = 0.5 + 0.5 * math.sin(2 * math.pi * (1.0 / 3.0) * t)
         cic.append(buzz * env * 0.25)
-    mix = [sea[i] * 0.8 + cic[i] * 0.5 for i in range(n)]
+    mix = [sea[i] * 0.8 + cic[i] * 0.12 for i in range(n)]  # cicadas far away: phones stress this band
     # Wrap the last `fade` samples into the loop start for a click-free join.
     for i in range(fade):
         a = i / fade
@@ -123,7 +123,7 @@ def engine():
         noise[i] = noise[i] * t + noise[n + i] * (1 - t)
     noise_peak = max(abs(x) for x in noise[:n])
     tone_peak = max(abs(x) for x in tone)
-    write("tank_engine.wav", [tone[i] / tone_peak + 0.35 * noise[i] / noise_peak for i in range(n)])
+    write("tank_engine.wav", [tone[i] / tone_peak + 0.08 * noise[i] / noise_peak for i in range(n)])
 
 
 if __name__ == "__main__":

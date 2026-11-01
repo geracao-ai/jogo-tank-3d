@@ -52,9 +52,9 @@ func set_manual_turn(turn: Vector2) -> void:
 	_manual_turn = turn
 
 
-## Turret angle relative to the hull, in radians: 0 is ahead, positive is to the left.
-func get_turret_yaw() -> float:
-	return rotation.y
+## Barrel elevation in radians: 0 is level, positive is up.
+func get_barrel_pitch() -> float:
+	return _pitch.rotation.x
 
 
 ## False when the barrel points behind the camera, where no crosshair can show it.

@@ -88,6 +88,8 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("4")
 cannon = NodePath("../../Tank/Cannon")
+color = Color(0, 0, 0, 0.9)
+thickness = 3.0
 
 [node name="MuteButton" type="Control" parent="Hud" node_paths=PackedStringArray("audio")]
 layout_mode = 3

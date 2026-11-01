@@ -19,7 +19,7 @@ const AIM_DOWN: StringName = &"touch_aim_down"
 ## Show the controls even without a touchscreen (desktop verification only).
 @export var force_visible: bool = false
 
-var _dial: TurretDial
+var _gauge: ElevationGauge
 
 @onready var _drive_joystick: VirtualJoystick = $DriveJoystick
 @onready var _aim_joystick: VirtualJoystick = $AimJoystick
@@ -45,10 +45,11 @@ func _ready() -> void:
 	_left_fire.released.connect(_keep_firing.bind(_right_fire))
 	_right_fire.released.connect(_keep_firing.bind(_left_fire))
 	cannon.set_manual_turn(Vector2.ZERO)
-	_dial = TurretDial.new()
-	_dial.cannon = cannon
-	_dial.color = tuning.dial_color
-	_aim_joystick.add_child(_dial)
+	_gauge = ElevationGauge.new()
+	_gauge.cannon = cannon
+	_gauge.background = tuning.gauge_background
+	_gauge.color = tuning.gauge_color
+	add_child(_gauge)
 	get_viewport().size_changed.connect(_layout)
 	_layout()
 
@@ -82,9 +83,9 @@ func _layout() -> void:
 
 	_place_joystick(_drive_joystick, Vector2(margin, joy_top), joy)
 	_place_joystick(_aim_joystick, Vector2(size.x - margin - joy, joy_top), joy)
-	_dial.size = Vector2(joy, joy)
-	_dial.radius = joy * 0.5
-	_dial.marker_radius = joy * tuning.dial_marker_ratio
+	var gauge: float = tuning.gauge_size * unit
+	_gauge.size = Vector2(gauge, gauge)
+	_gauge.position = Vector2(size.x - tuning.gauge_right_offset * unit - gauge, tuning.gauge_top_margin * unit)
 	# Each fire button is centred above its joystick.
 	_place_button(_left_fire, fire, Vector2(margin + (joy - fire) * 0.5, fire_top))
 	_place_button(_right_fire, fire, Vector2(size.x - margin - joy + (joy - fire) * 0.5, fire_top))

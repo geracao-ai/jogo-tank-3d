@@ -14,6 +14,8 @@ extends Node3D
 ## Re-emitted from every projectile this cannon fired, so a listener (story 004) connects once
 ## here instead of to short-lived projectiles. Never emitted for a shot that only reaches range.
 signal projectile_impacted(position: Vector3, normal: Vector3, collider: Node3D)
+## Emitted each time the cannon fires, before the shell (or the point-blank hit) resolves.
+signal fired
 
 ## Tuning resource (see cannon_tuning.gd / cannon_tuning.tres).
 @export var tuning: CannonTuning
@@ -112,6 +114,7 @@ func _aim(point: Vector3, delta: float) -> void:
 
 func _fire() -> void:
 	_cooldown = tuning.reload_interval
+	fired.emit()
 	var exclude: Array[RID] = [_tank.get_rid()]
 	# The barrel can poke through a wall the tank touches, and a shell's ray starting inside a
 	# body misses it, so the shot resolves here when something is between pivot and muzzle.

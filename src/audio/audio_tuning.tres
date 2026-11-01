@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="AudioTuning" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/audio/audio_tuning.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+master_volume = 0.8
+ambient_path = "res://assets/audio/ambient_sea_cicadas.wav"
+shot_path = "res://assets/audio/cannon_shot.wav"
+explosion_path = "res://assets/audio/explosion.wav"
+engine_path = "res://assets/audio/tank_engine.wav"
+ambient_db = -12.0
+shot_db = 0.0
+explosion_db = -2.0
+engine_idle_db = -16.0
+engine_full_db = -7.0
+engine_idle_pitch = 0.8
+engine_full_pitch = 1.8
+engine_response = 5.0
+one_shot_voices = 6
+mute_button_size = 0.14
+mute_button_margin = 0.03
+mute_button_background = Color(1, 1, 1, 0.3)
+mute_icon_color = Color(0.25, 0.3, 0.4, 0.9)
+mute_icon_muted_color = Color(0.7, 0.35, 0.33, 0.95)

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ImpactEffectsTuning" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/effects/impact_effects_tuning.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+pool_size = 6
+surface_offset = 0.4
+flash_duration = 0.18
+flash_size = 5.0
+flash_peak_time = 0.3
+flash_color = Color(1, 0.92, 0.7, 1)
+puff_count = 6
+puff_lifetime = 0.9
+puff_size_min = 1.6
+puff_size_max = 2.6
+puff_speed_min = 2.0
+puff_speed_max = 4.5
+puff_rise = 1.5
+puff_color = Color(0.95, 0.88, 0.8, 0.85)

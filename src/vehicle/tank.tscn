@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://src/vehicle/tank.gd" id="1"]
 [ext_resource type="Resource" path="res://src/vehicle/tank_tuning.tres" id="2"]
 [ext_resource type="Script" path="res://src/vehicle/cannon.gd" id="3"]
 [ext_resource type="Resource" path="res://src/vehicle/cannon_tuning.tres" id="4"]
 [ext_resource type="PackedScene" path="res://src/vehicle/projectile.tscn" id="5"]
+[ext_resource type="Shader" path="res://src/rendering/toon.gdshader" id="6"]
 
 [sub_resource type="BoxShape3D" id="shape"]
 size = Vector3(2.4, 1.0, 4.0)
@@ -18,8 +19,11 @@ size = Vector3(1.4, 0.6, 1.6)
 [sub_resource type="BoxMesh" id="barrel_mesh"]
 size = Vector3(0.2, 0.2, 2.0)
 
-[sub_resource type="StandardMaterial3D" id="mat"]
-albedo_color = Color(0.3, 0.45, 0.25, 1)
+[sub_resource type="ShaderMaterial" id="mat"]
+shader = ExtResource("6")
+shader_parameter/albedo = Color(0.56, 0.68, 0.5, 1)
+shader_parameter/band_threshold = 0.15
+shader_parameter/band_softness = 0.25
 
 [node name="Tank" type="CharacterBody3D"]
 script = ExtResource("1")

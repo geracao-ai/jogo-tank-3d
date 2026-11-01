@@ -24,6 +24,7 @@ var _shapes: Dictionary = {}
 var _materials: Dictionary = {}
 var _counts: Dictionary = {}
 var _layout: Dictionary = {}
+var _toon_shader: Shader = preload("res://src/rendering/toon.gdshader")
 
 
 func _ready() -> void:
@@ -130,7 +131,7 @@ func _build_sea_and_walls() -> void:
 	sea_node.name = "Sea"
 	add_child(sea_node)
 	_add_plane(sea_node, "Water", Vector2(length, sea["width"]),
-		Vector3(shore_x + length * 0.5, -float(sea["depth"]), 0), _color(sea["color"]))
+		Vector3(shore_x + length * 0.5, -float(sea["depth"]), 0), _color(sea["color"]), true)
 
 	# Invisible walls: the shoreline (east) keeps the tank out of the sea, the others keep it on the land.
 	_add_wall("SeaBarrier", Vector3(shore_x + t * 0.5, h * 0.5, 0), Vector3(t, h, land_z + 2.0 * t))
@@ -213,6 +214,8 @@ func _build_intact(obj: Destructible, stage: Node3D, def: Dictionary, size: Vect
 			Vector3(0, sign_y, size.z * 0.5 + sign_size.z * 0.5), _color(s["color"]))
 
 	var cfg: Dictionary = _layout["label"]
+	if not cfg["show"]:
+		return
 	var label := Label3D.new()
 	label.name = "Label"
 	label.text = def["label"]
@@ -272,10 +275,10 @@ func _add_box(parent: Node3D, node_name: String, size: Vector3, pos: Vector3, co
 	parent.add_child(mi)
 
 
-func _add_plane(parent: Node3D, node_name: String, size: Vector2, pos: Vector3, color: Color) -> void:
+func _add_plane(parent: Node3D, node_name: String, size: Vector2, pos: Vector3, color: Color, is_sea: bool = false) -> void:
 	var mesh := PlaneMesh.new()
 	mesh.size = size
-	mesh.material = _material(color)
+	mesh.material = _sea_material(color) if is_sea else _material(color)
 	var mi := MeshInstance3D.new()
 	mi.name = node_name
 	mi.mesh = mesh
@@ -300,12 +303,27 @@ func _box_shape(size: Vector3) -> BoxShape3D:
 	return _shapes[size]
 
 
-func _material(color: Color) -> StandardMaterial3D:
+## Shared toon material for a colour (see toon.gdshader; band values come from the layout's "toon").
+func _material(color: Color) -> ShaderMaterial:
 	if not _materials.has(color):
-		var mat := StandardMaterial3D.new()
-		mat.albedo_color = color
+		var mat := ShaderMaterial.new()
+		mat.shader = _toon_shader
+		mat.set_shader_parameter("albedo", color)
+		mat.set_shader_parameter("band_threshold", float(_layout["toon"]["band_threshold"]))
+		mat.set_shader_parameter("band_softness", float(_layout["toon"]["band_softness"]))
 		_materials[color] = mat
 	return _materials[color]
+
+
+## The sea's toon material: the same shader with the animated shimmer switched on.
+func _sea_material(color: Color) -> ShaderMaterial:
+	var sea: Dictionary = _layout["sea"]
+	var mat: ShaderMaterial = _material(color).duplicate()
+	mat.set_shader_parameter("shimmer_strength", float(sea["shimmer_strength"]))
+	mat.set_shader_parameter("shimmer_color", _color(sea["shimmer_color"]))
+	mat.set_shader_parameter("shimmer_scale", float(sea["shimmer_scale"]))
+	mat.set_shader_parameter("shimmer_speed", float(sea["shimmer_speed"]))
+	return mat
 
 
 func _v2(a: Array) -> Vector2:

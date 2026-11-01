@@ -38,6 +38,7 @@ func _ready() -> void:
 	_crater_mesh.rings = 1
 	var crater_material := StandardMaterial3D.new()
 	crater_material.albedo_color = tuning.crater_color
+	crater_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED # keeps the palette colour exactly
 	_crater_mesh.material = crater_material
 
 	# A camera-facing quad with a soft round texture: 2 triangles per puff, for phones.

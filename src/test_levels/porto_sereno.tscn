@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=19 format=3]
 
 [ext_resource type="PackedScene" path="res://src/vehicle/tank.tscn" id="1"]
 [ext_resource type="Script" path="res://src/camera/follow_camera.gd" id="2"]
@@ -9,12 +9,27 @@
 [ext_resource type="PackedScene" path="res://src/ui/touch_controls.tscn" id="7"]
 [ext_resource type="Script" path="res://src/destruction/marks_manager.gd" id="m1"]
 [ext_resource type="Resource" path="res://src/destruction/marks_tuning.tres" id="m2"]
+[ext_resource type="Shader" path="res://src/rendering/watercolor_sky.gdshader" id="s1"]
+[ext_resource type="Script" path="res://src/effects/impact_effects.gd" id="fx1"]
+[ext_resource type="Resource" path="res://src/effects/impact_effects_tuning.tres" id="fx2"]
+[ext_resource type="Script" path="res://src/audio/audio_manager.gd" id="a1"]
+[ext_resource type="Resource" path="res://src/audio/audio_tuning.tres" id="a2"]
+[ext_resource type="Script" path="res://src/ui/mute_button.gd" id="a3"]
+
+[sub_resource type="ShaderMaterial" id="sky_material"]
+shader = ExtResource("s1")
+
+[sub_resource type="Sky" id="sky"]
+sky_material = SubResource("sky_material")
+radiance_size = 0
 
 [sub_resource type="Environment" id="env"]
-background_mode = 1
-background_color = Color(0.6, 0.65, 0.7, 1)
+background_mode = 2
+sky = SubResource("sky")
 ambient_light_source = 2
-ambient_light_color = Color(0.7, 0.7, 0.7, 1)
+reflected_light_source = 1
+ambient_light_color = Color(0.8, 0.83, 0.9, 1)
+ambient_light_energy = 1.0
 
 [node name="PortoSereno" type="Node3D"]
 
@@ -22,6 +37,8 @@ ambient_light_color = Color(0.7, 0.7, 0.7, 1)
 environment = SubResource("env")
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
+light_color = Color(1, 0.95, 0.84, 1)
+light_energy = 0.36
 transform = Transform3D(1, 0, 0, 0, 0.7071, 0.7071, 0, -0.7071, 0.7071, 0, 10, 0)
 
 [node name="City" type="Node3D" parent="." node_paths=PackedStringArray("tank")]
@@ -39,6 +56,17 @@ script = ExtResource("m1")
 cannon = NodePath("../Tank/Cannon")
 container = NodePath("../City")
 tuning = ExtResource("m2")
+
+[node name="ImpactEffects" type="Node3D" parent="." node_paths=PackedStringArray("cannon")]
+script = ExtResource("fx1")
+cannon = NodePath("../Tank/Cannon")
+tuning = ExtResource("fx2")
+
+[node name="AudioManager" type="Node" parent="." node_paths=PackedStringArray("cannon", "tank")]
+script = ExtResource("a1")
+cannon = NodePath("../Tank/Cannon")
+tank = NodePath("../Tank")
+tuning = ExtResource("a2")
 
 [node name="FollowCamera" type="Camera3D" parent="." node_paths=PackedStringArray("target")]
 transform = Transform3D(1, 0, 0, 0, 0.8192, 0.5736, 0, -0.5736, 0.8192, 0, 5, 9)
@@ -60,6 +88,12 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("4")
 cannon = NodePath("../../Tank/Cannon")
+
+[node name="MuteButton" type="Control" parent="Hud" node_paths=PackedStringArray("audio")]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("a3")
+audio = NodePath("../../AudioManager")
 
 [node name="TouchControls" parent="." node_paths=PackedStringArray("cannon") instance=ExtResource("7")]
 cannon = NodePath("../Tank/Cannon")

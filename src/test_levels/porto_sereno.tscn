@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="PackedScene" path="res://src/vehicle/tank.tscn" id="1"]
 [ext_resource type="Script" path="res://src/camera/follow_camera.gd" id="2"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" path="res://src/destruction/destruction_router.gd" id="5"]
 [ext_resource type="Script" path="res://src/world/city_builder.gd" id="6"]
 [ext_resource type="PackedScene" path="res://src/ui/touch_controls.tscn" id="7"]
+[ext_resource type="Script" path="res://src/destruction/marks_manager.gd" id="m1"]
+[ext_resource type="Resource" path="res://src/destruction/marks_tuning.tres" id="m2"]
 
 [sub_resource type="Environment" id="env"]
 background_mode = 1
@@ -31,6 +33,12 @@ tank = NodePath("../Tank")
 [node name="DestructionRouter" type="Node" parent="." node_paths=PackedStringArray("cannon")]
 script = ExtResource("5")
 cannon = NodePath("../Tank/Cannon")
+
+[node name="MarksManager" type="Node3D" parent="." node_paths=PackedStringArray("cannon", "container")]
+script = ExtResource("m1")
+cannon = NodePath("../Tank/Cannon")
+container = NodePath("../City")
+tuning = ExtResource("m2")
 
 [node name="FollowCamera" type="Camera3D" parent="." node_paths=PackedStringArray("target")]
 transform = Transform3D(1, 0, 0, 0, 0.8192, 0.5736, 0, -0.5736, 0.8192, 0, 5, 9)

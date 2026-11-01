@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="MarksTuning" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/destruction/marks_tuning.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+crater_cap = 60
+crater_radius_min = 0.8
+crater_radius_max = 1.4
+crater_y_offset = 0.06
+crater_color = Color(0.12, 0.1, 0.09, 1)
+crater_min_normal_y = 0.7
+smoke_amount_damaged = 16
+smoke_amount_destroyed = 8
+smoke_lifetime = 4.0
+smoke_velocity_min = 0.8
+smoke_velocity_max = 1.4
+smoke_size_ratio = 0.5
+smoke_size_min = 2.0
+smoke_footprint_ratio = 0.6
+smoke_start_height = 0.3
+smoke_color = Color(0.55, 0.55, 0.58, 0.9)

@@ -1,0 +1,5 @@
+Reviewed-Content-Hash: src/destruction/marks_manager.gd 1f6e8a7823130be67bcf8f74b39a8be36f37a433
+Reviewed-Content-Hash: src/destruction/marks_tuning.gd c207c68d8d31c0da7e023f04a827fa12e5428777
+Reviewed-Content-Hash: src/destruction/marks_tuning.tres bc7493aeb8816e2f5e03dabeed56d46b9d2aba1c
+Reviewed-Content-Hash: src/test_levels/porto_sereno.tscn 55022bd52d994ed2b0ed29d8ec7223930dbb95ed
+Reviewed-Content-Hash: src/test_levels/single_building.tscn 457bcfa6ac2db1d811af1f09e6c99c0b7bc51165

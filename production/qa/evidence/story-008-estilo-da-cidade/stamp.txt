@@ -1,0 +1,12 @@
+Reviewed-Content-Hash: src/world/city_builder.gd 9c2a5726b6e8d0131b3fd8e51e51f440e916ad44
+Reviewed-Content-Hash: src/world/city_prop.gd 448a2372c778b63ee75a6d9f36fb900594b37054
+Reviewed-Content-Hash: src/world/porto_sereno_city.json 99ac57b4f75bb7c310ebaf6ba181b45b28ce0951
+Reviewed-Content-Hash: src/rendering/toon.gdshader 43b4137d7348b0d8bdca14e08d70982cc669348d
+Reviewed-Content-Hash: src/rendering/ground_shadow.gdshader c8b5bebfd8ca09251b80a5f1c6e028f6ef5ff6b3
+Reviewed-Content-Hash: src/rendering/ruined_building.gdshader 1d8d0967f55816977ac42c76b50feec4aeeb09ce
+Reviewed-Content-Hash: src/vehicle/tank.gd 8101780555f3fe758a588be61c8909049bb04c7a
+Reviewed-Content-Hash: src/vehicle/tank.tscn 4987f406439c07513bf2e70aa2bda691255699d8
+Reviewed-Content-Hash: src/vehicle/tank_model.gd ec35306738cd6c18bfd7c5af7334eb90b407cd3f
+Reviewed-Content-Hash: src/destruction/destruction_router.gd 3acf862ecc32a869e789f6c0f2670342fa98b493
+Reviewed-Content-Hash: src/destruction/marks_manager.gd 7e4383552a8e04cc2e6c801a79c7988f83a3f03e
+Reviewed-Content-Hash: src/test_levels/porto_sereno.tscn 1b563593af212a0ec039523c03feb84d82bddefb

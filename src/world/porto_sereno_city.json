@@ -1,5 +1,5 @@
 {
- "_doc": "Porto Sereno city layout. Edit this file to change the map; src/world/city_builder.gd builds it at load. Units: metres. Grid (col,row) 0..grid-1; col grows +X, row grows +Z. lot.offset = [x,z] from the block centre; lot.size = [width(x), height(y), depth(z)]; lot.yaw_deg rotates the object (its front, where awnings/signs go, is local +Z). Colours are [r,g,b] 0..1. The sea lies on the +X (east) side. label.show=false hides the placeholder text labels. toon sets the light/shade band for every surface; sea.shimmer_* animates the sea glints.",
+ "_doc": "Porto Sereno city layout. Edit this file to change the map; src/world/city_builder.gd builds it at load. Units: metres. Grid (col,row) 0..grid-1; col grows +X, row grows +Z. lot.offset = [x,z] from the block centre; lot.size = [width(x), unused, depth(z)] is the footprint the model is fitted into, keeping proportions; lot.model is the kit model, lot.palette an index into palettes, lot.stretch_y extra height; lot.yaw_deg rotates the object (its front, where awnings and signs go, is local +Z). damaged.clip_y and destroyed.clip_y cut the model, in its own units. Colours are [r,g,b] 0..1. The sea lies on the +X (east) side. scenery holds far land, hills (layer names a colour in hill_colors) and clouds. decor is every tree, bush, fence and boat: type names an entry of decor_types, whose collision makes it a one-hit CityProp. poles.runs are lines of utility poles; poles on a street are skipped. shadow sets the painted ground shadows; surfaces the tiled ground textures; toon the light and shade band; sea.shimmer_* the sea glints.",
  "grid": [
   3,
   3
@@ -15,13 +15,13 @@
  "wall_thickness": 2,
  "ground_color": [
   0.66,
-  0.78,
-  0.58
+  0.8,
+  0.47
  ],
  "street_color": [
-  0.8,
-  0.74,
-  0.67
+  0.78,
+  0.72,
+  0.66
  ],
  "street_y": 0.03,
  "sea": {
@@ -29,9 +29,9 @@
   "width": 400,
   "depth": 0.4,
   "color": [
-   0.46,
-   0.73,
-   0.83
+   0.3,
+   0.66,
+   0.78
   ],
   "shimmer_color": [
    0.93,
@@ -49,29 +49,8 @@
   ],
   "yaw_deg": 0
  },
- "label": {
-  "height_offset": 2.0,
-  "pixel_size": 0.03,
-  "font_size": 96,
-  "color": [
-   1,
-   1,
-   1
-  ],
-  "show": false
- },
  "damaged": {
-  "chunk_size_frac": [
-   0.5,
-   0.25,
-   0.5
-  ],
-  "chunk_offset_frac": [
-   0.15,
-   0.1
-  ],
-  "chunk_yaw_deg": 15,
-  "chunk_sink": 0.5
+  "clip_y": 0.5
  },
  "rubble": [
   {
@@ -81,7 +60,7 @@
    ],
    "size": [
     0.3,
-    0.6,
+    1.6,
     0.25
    ],
    "yaw_deg": 0
@@ -93,7 +72,7 @@
    ],
    "size": [
     0.2,
-    0.9,
+    2.4,
     0.3
    ],
    "yaw_deg": 25
@@ -105,7 +84,7 @@
    ],
    "size": [
     0.25,
-    0.4,
+    1.2,
     0.2
    ],
    "yaw_deg": -10
@@ -113,84 +92,62 @@
  ],
  "types": {
   "building": {
-   "label": "PREDIO",
    "tuning": "res://src/world/tuning/building_tuning.tres",
-   "intact_color": [
-    0.96,
-    0.93,
-    0.86
-   ],
-   "damaged_color": [
-    0.78,
-    0.67,
-    0.61
-   ],
    "rubble_color": [
     0.62,
     0.54,
     0.49
-   ],
-   "damaged_height_ratio": 0.6
+   ]
   },
   "shop": {
-   "label": "LOJA",
    "tuning": "res://src/world/tuning/shop_tuning.tres",
-   "intact_color": [
-    0.97,
-    0.85,
-    0.66
-   ],
-   "damaged_color": [
-    0.77,
-    0.63,
-    0.51
-   ],
    "rubble_color": [
     0.64,
     0.52,
     0.45
    ],
-   "damaged_height_ratio": 0.6,
    "awning": {
     "color": [
      0.78,
      0.42,
      0.38
     ],
-    "overhang": 0.8,
+    "overhang": 0.9,
     "thickness": 0.3,
-    "y": 3.0
+    "y": 3.4,
+    "width_frac": 0.7
    }
   },
   "bank": {
-   "label": "BANCO",
    "tuning": "res://src/world/tuning/bank_tuning.tres",
-   "intact_color": [
-    0.86,
-    0.9,
-    0.95
-   ],
-   "damaged_color": [
-    0.68,
-    0.72,
-    0.78
-   ],
    "rubble_color": [
     0.58,
     0.57,
     0.58
    ],
-   "damaged_height_ratio": 0.6,
    "sign": {
     "color": [
      0.86,
      0.72,
      0.35
     ],
-    "width_frac": 0.6,
-    "height": 1.4,
+    "width_frac": 0.45,
+    "height": 1.2,
     "thickness": 0.3,
-    "top_gap": 1.0
+    "y": 8.0,
+    "forward": 4.2
+   },
+   "portico": {
+    "color": [
+     0.95,
+     0.92,
+     0.84
+    ],
+    "height": 6.6,
+    "depth": 4.0,
+    "roof": 0.7,
+    "columns": 6,
+    "width_frac": 0.62
    }
   }
  },
@@ -210,7 +167,10 @@
     14,
     14
    ],
-   "yaw_deg": 180
+   "yaw_deg": 180,
+   "model": "res://assets/models/suburban/building-type-t.glb",
+   "palette": 0,
+   "stretch_y": 1.03
   },
   {
    "block": [
@@ -227,7 +187,9 @@
     4,
     14
    ],
-   "yaw_deg": 180
+   "yaw_deg": 180,
+   "model": "res://assets/models/suburban/building-type-h.glb",
+   "palette": 3
   },
   {
    "block": [
@@ -244,7 +206,9 @@
     4,
     14
    ],
-   "yaw_deg": 0
+   "yaw_deg": 0,
+   "model": "res://assets/models/suburban/building-type-g.glb",
+   "palette": 1
   },
   {
    "block": [
@@ -261,7 +225,10 @@
     20,
     14
    ],
-   "yaw_deg": 0
+   "yaw_deg": 0,
+   "model": "res://assets/models/suburban/building-type-n.glb",
+   "palette": 2,
+   "stretch_y": 1.12
   },
   {
    "block": [
@@ -278,7 +245,10 @@
     26,
     14
    ],
-   "yaw_deg": 180
+   "yaw_deg": 180,
+   "model": "res://assets/models/suburban/building-type-b.glb",
+   "palette": 1,
+   "stretch_y": 1.22
   },
   {
    "block": [
@@ -295,7 +265,9 @@
     4,
     14
    ],
-   "yaw_deg": 180
+   "yaw_deg": 180,
+   "model": "res://assets/models/suburban/building-type-a.glb",
+   "palette": 5
   },
   {
    "block": [
@@ -312,7 +284,9 @@
     4,
     12
    ],
-   "yaw_deg": 0
+   "yaw_deg": 0,
+   "model": "res://assets/models/suburban/building-type-c.glb",
+   "palette": 0
   },
   {
    "block": [
@@ -329,7 +303,10 @@
     17,
     16
    ],
-   "yaw_deg": 180
+   "yaw_deg": 180,
+   "model": "res://assets/models/suburban/building-type-d.glb",
+   "palette": 3,
+   "stretch_y": 1.08
   },
   {
    "block": [
@@ -346,7 +323,10 @@
     23,
     12
    ],
-   "yaw_deg": 180
+   "yaw_deg": 180,
+   "model": "res://assets/models/suburban/building-type-s.glb",
+   "palette": 5,
+   "stretch_y": 1.17
   },
   {
    "block": [
@@ -363,7 +343,9 @@
     4,
     10
    ],
-   "yaw_deg": 0
+   "yaw_deg": 0,
+   "model": "res://assets/models/suburban/building-type-p.glb",
+   "palette": 2
   },
   {
    "block": [
@@ -380,7 +362,10 @@
     12,
     16
    ],
-   "yaw_deg": 180
+   "yaw_deg": 180,
+   "model": "res://assets/models/suburban/building-type-u.glb",
+   "palette": 4,
+   "stretch_y": 1.0
   },
   {
    "block": [
@@ -397,7 +382,10 @@
     18,
     12
    ],
-   "yaw_deg": 180
+   "yaw_deg": 180,
+   "model": "res://assets/models/suburban/building-type-t.glb",
+   "palette": 0,
+   "stretch_y": 1.09
   },
   {
    "block": [
@@ -414,7 +402,9 @@
     4,
     10
    ],
-   "yaw_deg": 0
+   "yaw_deg": 0,
+   "model": "res://assets/models/suburban/building-type-j.glb",
+   "palette": 4
   },
   {
    "block": [
@@ -431,7 +421,9 @@
     9,
     18
    ],
-   "yaw_deg": 180
+   "yaw_deg": 180,
+   "model": "res://assets/models/suburban/building-type-b.glb",
+   "palette": 1
   },
   {
    "block": [
@@ -448,7 +440,10 @@
     28,
     10
    ],
-   "yaw_deg": 0
+   "yaw_deg": 0,
+   "model": "res://assets/models/suburban/building-type-n.glb",
+   "palette": 2,
+   "stretch_y": 1.25
   },
   {
    "block": [
@@ -465,7 +460,10 @@
     14,
     14
    ],
-   "yaw_deg": 180
+   "yaw_deg": 180,
+   "model": "res://assets/models/suburban/building-type-b.glb",
+   "palette": 1,
+   "stretch_y": 1.03
   },
   {
    "block": [
@@ -482,7 +480,9 @@
     4,
     14
    ],
-   "yaw_deg": 180
+   "yaw_deg": 180,
+   "model": "res://assets/models/suburban/building-type-h.glb",
+   "palette": 3
   },
   {
    "block": [
@@ -499,7 +499,9 @@
     4,
     12
    ],
-   "yaw_deg": 0
+   "yaw_deg": 0,
+   "model": "res://assets/models/suburban/building-type-g.glb",
+   "palette": 1
   },
   {
    "block": [
@@ -516,7 +518,10 @@
     20,
     14
    ],
-   "yaw_deg": 180
+   "yaw_deg": 180,
+   "model": "res://assets/models/suburban/building-type-d.glb",
+   "palette": 3,
+   "stretch_y": 1.12
   },
   {
    "block": [
@@ -533,7 +538,9 @@
     4,
     14
    ],
-   "yaw_deg": 180
+   "yaw_deg": 180,
+   "model": "res://assets/models/suburban/building-type-a.glb",
+   "palette": 5
   },
   {
    "block": [
@@ -550,7 +557,9 @@
     4,
     12
    ],
-   "yaw_deg": 0
+   "yaw_deg": 0,
+   "model": "res://assets/models/suburban/building-type-c.glb",
+   "palette": 0
   },
   {
    "block": [
@@ -567,7 +576,10 @@
     26,
     16
    ],
-   "yaw_deg": 180
+   "yaw_deg": 180,
+   "model": "res://assets/models/suburban/building-type-s.glb",
+   "palette": 5,
+   "stretch_y": 1.22
   },
   {
    "block": [
@@ -584,7 +596,10 @@
     17,
     12
    ],
-   "yaw_deg": 180
+   "yaw_deg": 180,
+   "model": "res://assets/models/suburban/building-type-u.glb",
+   "palette": 4,
+   "stretch_y": 1.08
   },
   {
    "block": [
@@ -601,7 +616,9 @@
     4,
     10
    ],
-   "yaw_deg": 0
+   "yaw_deg": 0,
+   "model": "res://assets/models/suburban/building-type-p.glb",
+   "palette": 2
   },
   {
    "block": [
@@ -618,7 +635,10 @@
     23,
     24
    ],
-   "yaw_deg": 90
+   "yaw_deg": 90,
+   "model": "res://assets/models/suburban/building-type-t.glb",
+   "palette": 0,
+   "stretch_y": 1.17
   },
   {
    "block": [
@@ -635,11 +655,3067 @@
     4,
     24
    ],
-   "yaw_deg": 270
+   "yaw_deg": 270,
+   "model": "res://assets/models/suburban/building-type-j.glb",
+   "palette": 4
   }
  ],
  "toon": {
   "band_threshold": 0.15,
   "band_softness": 0.25
+ },
+ "sidewalk_width": 2.5,
+ "sidewalk_color": [
+  0.91,
+  0.86,
+  0.76
+ ],
+ "palettes": [
+  "res://assets/textures/palette_0.png",
+  "res://assets/textures/palette_1.png",
+  "res://assets/textures/palette_2.png",
+  "res://assets/textures/palette_3.png",
+  "res://assets/textures/palette_4.png",
+  "res://assets/textures/palette_5.png"
+ ],
+ "paint": {
+  "ground_tint": 0.22,
+  "ground_tint_height": 4.0
+ },
+ "shadow": {
+  "y": 0.06,
+  "length": 0.55,
+  "margin": 2.0,
+  "color": [
+   0.22,
+   0.27,
+   0.48,
+   0.34
+  ]
+ },
+ "surfaces": {
+  "street": {
+   "texture": "res://assets/textures/cobble.png",
+   "scale": 0.42
+  },
+  "walk": {
+   "texture": "res://assets/textures/paving.png",
+   "scale": 0.3
+  },
+  "land": {
+   "texture": "res://assets/textures/grass.png",
+   "scale": 0.05
+  }
+ },
+ "prop": {
+  "collision_layer": 2,
+  "fall_time": 0.7,
+  "fall_angle_deg": 86,
+  "sink_depth": 2.5
+ },
+ "destroyed": {
+  "clip_y": 0.17
+ },
+ "decor": [
+  {
+   "type": "tree_default",
+   "pos": [
+    -69.7,
+    -33.2
+   ],
+   "yaw_deg": 57,
+   "scale": 0.98
+  },
+  {
+   "type": "bush_large",
+   "pos": [
+    -64.44,
+    -51.17
+   ],
+   "yaw_deg": 199,
+   "scale": 0.91
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    -58.58,
+    -70.57
+   ],
+   "yaw_deg": 84,
+   "scale": 1.16
+  },
+  {
+   "type": "tree_default",
+   "pos": [
+    -51.13,
+    -52.47
+   ],
+   "yaw_deg": 169,
+   "scale": 0.96
+  },
+  {
+   "type": "bush_large",
+   "pos": [
+    -52.87,
+    -40.29
+   ],
+   "yaw_deg": 156,
+   "scale": 1.02
+  },
+  {
+   "type": "tree_default",
+   "pos": [
+    -52.89,
+    -33.05
+   ],
+   "yaw_deg": 11,
+   "scale": 1.18
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    -46.27,
+    -69.84
+   ],
+   "yaw_deg": 4,
+   "scale": 1.01
+  },
+  {
+   "type": "tree_fat",
+   "pos": [
+    -39.28,
+    -52.93
+   ],
+   "yaw_deg": 46,
+   "scale": 0.92
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    -40.38,
+    -34.37
+   ],
+   "yaw_deg": 90,
+   "scale": 1.13
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    -34.84,
+    -57.8
+   ],
+   "yaw_deg": 207,
+   "scale": 0.86
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    -34.71,
+    -45.04
+   ],
+   "yaw_deg": 326,
+   "scale": 0.86
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -68.5,
+    -33.2
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -65.62,
+    -33.2
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -62.74,
+    -33.2
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -59.86,
+    -33.2
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -56.98,
+    -33.2
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -70.8,
+    -49.0
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -70.8,
+    -46.12
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -70.8,
+    -43.24
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -70.8,
+    -40.36
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -70.8,
+    -37.48
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "tree_default",
+   "pos": [
+    -69.05,
+    11.91
+   ],
+   "yaw_deg": 249,
+   "scale": 1.09
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    -70.19,
+    17.29
+   ],
+   "yaw_deg": 193,
+   "scale": 1.14
+  },
+  {
+   "type": "tree_fat",
+   "pos": [
+    -64.87,
+    6.59
+   ],
+   "yaw_deg": 182,
+   "scale": 1.09
+  },
+  {
+   "type": "bush_large",
+   "pos": [
+    -57.33,
+    -18.47
+   ],
+   "yaw_deg": 353,
+   "scale": 1.1
+  },
+  {
+   "type": "tree_fat",
+   "pos": [
+    -51.37,
+    -17.71
+   ],
+   "yaw_deg": 182,
+   "scale": 0.97
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -68.5,
+    18.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -65.62,
+    18.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -62.74,
+    18.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -59.86,
+    18.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -56.98,
+    18.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -49.0,
+    18.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -46.12,
+    18.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -43.24,
+    18.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -40.36,
+    18.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -37.48,
+    18.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -70.8,
+    3.0
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -70.8,
+    5.88
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -70.8,
+    8.76
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -70.8,
+    11.64
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -70.8,
+    14.52
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "bush",
+   "pos": [
+    -69.03,
+    34.96
+   ],
+   "yaw_deg": 84,
+   "scale": 0.87
+  },
+  {
+   "type": "tree_default",
+   "pos": [
+    -70.03,
+    40.1
+   ],
+   "yaw_deg": 212,
+   "scale": 1.01
+  },
+  {
+   "type": "bush",
+   "pos": [
+    -70.52,
+    46.81
+   ],
+   "yaw_deg": 0,
+   "scale": 0.97
+  },
+  {
+   "type": "tree_fat",
+   "pos": [
+    -63.1,
+    51.59
+   ],
+   "yaw_deg": 180,
+   "scale": 1.14
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    -57.87,
+    34.91
+   ],
+   "yaw_deg": 68,
+   "scale": 1.06
+  },
+  {
+   "type": "tree_default",
+   "pos": [
+    -58.35,
+    52.75
+   ],
+   "yaw_deg": 288,
+   "scale": 0.98
+  },
+  {
+   "type": "bush",
+   "pos": [
+    -51.81,
+    39.52
+   ],
+   "yaw_deg": 154,
+   "scale": 1.02
+  },
+  {
+   "type": "tree_fat",
+   "pos": [
+    -52.02,
+    45.57
+   ],
+   "yaw_deg": 244,
+   "scale": 0.86
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    -45.93,
+    33.55
+   ],
+   "yaw_deg": 242,
+   "scale": 1.12
+  },
+  {
+   "type": "bush_large",
+   "pos": [
+    -46.02,
+    52.98
+   ],
+   "yaw_deg": 265,
+   "scale": 1.08
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    -40.07,
+    51.72
+   ],
+   "yaw_deg": 302,
+   "scale": 0.9
+  },
+  {
+   "type": "bush",
+   "pos": [
+    -34.97,
+    34.56
+   ],
+   "yaw_deg": 218,
+   "scale": 1.06
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -68.5,
+    70.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -65.62,
+    70.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -62.74,
+    70.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -59.86,
+    70.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -56.98,
+    70.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -70.8,
+    55.0
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -70.8,
+    57.88
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -70.8,
+    60.76
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -70.8,
+    63.64
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -70.8,
+    66.52
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    -17.84,
+    -63.7
+   ],
+   "yaw_deg": 241,
+   "scale": 1.17
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    -17.05,
+    -57.92
+   ],
+   "yaw_deg": 217,
+   "scale": 1.06
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    -17.42,
+    -45.67
+   ],
+   "yaw_deg": 13,
+   "scale": 0.97
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    -18.9,
+    -33.32
+   ],
+   "yaw_deg": 112,
+   "scale": 1.07
+  },
+  {
+   "type": "bush",
+   "pos": [
+    -5.76,
+    -70.91
+   ],
+   "yaw_deg": 55,
+   "scale": 1.08
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    -0.02,
+    -69.12
+   ],
+   "yaw_deg": 191,
+   "scale": 1.17
+  },
+  {
+   "type": "tree_fat",
+   "pos": [
+    0.82,
+    -63.89
+   ],
+   "yaw_deg": 317,
+   "scale": 0.93
+  },
+  {
+   "type": "tree_fat",
+   "pos": [
+    0.03,
+    -58.73
+   ],
+   "yaw_deg": 120,
+   "scale": 1.15
+  },
+  {
+   "type": "bush",
+   "pos": [
+    5.18,
+    -70.75
+   ],
+   "yaw_deg": 304,
+   "scale": 1.01
+  },
+  {
+   "type": "bush_large",
+   "pos": [
+    12.36,
+    -70.55
+   ],
+   "yaw_deg": 59,
+   "scale": 0.88
+  },
+  {
+   "type": "bush_large",
+   "pos": [
+    11.71,
+    -52.53
+   ],
+   "yaw_deg": 170,
+   "scale": 1.18
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    18.92,
+    -64.28
+   ],
+   "yaw_deg": 18,
+   "scale": 1.06
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    17.37,
+    -46.61
+   ],
+   "yaw_deg": 250,
+   "scale": 1.16
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -16.5,
+    -33.2
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -13.62,
+    -33.2
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -10.74,
+    -33.2
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -7.86,
+    -33.2
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -4.98,
+    -33.2
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    3.0,
+    -33.2
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    5.88,
+    -33.2
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    8.76,
+    -33.2
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    11.64,
+    -33.2
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    14.52,
+    -33.2
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -18.8,
+    -49.0
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -18.8,
+    -46.12
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -18.8,
+    -43.24
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -18.8,
+    -40.36
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -18.8,
+    -37.48
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "tree_default",
+   "pos": [
+    -18.86,
+    -5.26
+   ],
+   "yaw_deg": 240,
+   "scale": 0.9
+  },
+  {
+   "type": "tree_default",
+   "pos": [
+    -17.5,
+    0.34
+   ],
+   "yaw_deg": 16,
+   "scale": 1.02
+  },
+  {
+   "type": "bush_large",
+   "pos": [
+    -18.37,
+    5.12
+   ],
+   "yaw_deg": 11,
+   "scale": 1.09
+  },
+  {
+   "type": "bush_large",
+   "pos": [
+    -12.09,
+    -18.52
+   ],
+   "yaw_deg": 83,
+   "scale": 0.86
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    0.29,
+    -18.14
+   ],
+   "yaw_deg": 138,
+   "scale": 0.85
+  },
+  {
+   "type": "tree_fat",
+   "pos": [
+    0.88,
+    6.43
+   ],
+   "yaw_deg": 121,
+   "scale": 1.16
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    5.99,
+    -17.44
+   ],
+   "yaw_deg": 24,
+   "scale": 0.94
+  },
+  {
+   "type": "bush",
+   "pos": [
+    6.39,
+    6.28
+   ],
+   "yaw_deg": 96,
+   "scale": 1.04
+  },
+  {
+   "type": "tree_default",
+   "pos": [
+    12.2,
+    -17.29
+   ],
+   "yaw_deg": 109,
+   "scale": 1.07
+  },
+  {
+   "type": "tree_fat",
+   "pos": [
+    12.38,
+    18.78
+   ],
+   "yaw_deg": 114,
+   "scale": 1.04
+  },
+  {
+   "type": "tree_fat",
+   "pos": [
+    18.64,
+    -18.37
+   ],
+   "yaw_deg": 66,
+   "scale": 1.04
+  },
+  {
+   "type": "tree_default",
+   "pos": [
+    17.1,
+    17.4
+   ],
+   "yaw_deg": 146,
+   "scale": 1.16
+  },
+  {
+   "type": "fence",
+   "pos": [
+    8.76,
+    18.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    11.64,
+    18.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    14.52,
+    18.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -18.8,
+    3.0
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -18.8,
+    5.88
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -18.8,
+    8.76
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -18.8,
+    11.64
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -18.8,
+    14.52
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "tree_default",
+   "pos": [
+    -17.37,
+    58.31
+   ],
+   "yaw_deg": 9,
+   "scale": 1.1
+  },
+  {
+   "type": "bush_large",
+   "pos": [
+    -17.88,
+    69.64
+   ],
+   "yaw_deg": 156,
+   "scale": 0.91
+  },
+  {
+   "type": "bush_large",
+   "pos": [
+    -12.93,
+    34.08
+   ],
+   "yaw_deg": 285,
+   "scale": 0.86
+  },
+  {
+   "type": "bush",
+   "pos": [
+    -12.54,
+    63.86
+   ],
+   "yaw_deg": 185,
+   "scale": 0.92
+  },
+  {
+   "type": "tree_default",
+   "pos": [
+    -11.55,
+    69.19
+   ],
+   "yaw_deg": 271,
+   "scale": 1.06
+  },
+  {
+   "type": "tree_default",
+   "pos": [
+    -6.08,
+    63.87
+   ],
+   "yaw_deg": 226,
+   "scale": 0.87
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    0.19,
+    33.21
+   ],
+   "yaw_deg": 214,
+   "scale": 1.09
+  },
+  {
+   "type": "tree_default",
+   "pos": [
+    -0.04,
+    40.76
+   ],
+   "yaw_deg": 201,
+   "scale": 1.01
+  },
+  {
+   "type": "bush_large",
+   "pos": [
+    0.12,
+    45.71
+   ],
+   "yaw_deg": 123,
+   "scale": 0.98
+  },
+  {
+   "type": "tree_fat",
+   "pos": [
+    5.29,
+    34.66
+   ],
+   "yaw_deg": 250,
+   "scale": 0.98
+  },
+  {
+   "type": "bush",
+   "pos": [
+    18.63,
+    33.04
+   ],
+   "yaw_deg": 347,
+   "scale": 0.86
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    18.09,
+    40.38
+   ],
+   "yaw_deg": 230,
+   "scale": 1.19
+  },
+  {
+   "type": "fence",
+   "pos": [
+    3.0,
+    70.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    5.88,
+    70.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    8.76,
+    70.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    11.64,
+    70.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    14.52,
+    70.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -18.8,
+    55.0
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -18.8,
+    57.88
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -18.8,
+    60.76
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -18.8,
+    63.64
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    -18.8,
+    66.52
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "bush_large",
+   "pos": [
+    33.61,
+    -45.14
+   ],
+   "yaw_deg": 140,
+   "scale": 1.18
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    34.34,
+    -39.09
+   ],
+   "yaw_deg": 179,
+   "scale": 1.09
+  },
+  {
+   "type": "bush_large",
+   "pos": [
+    39.79,
+    -40.99
+   ],
+   "yaw_deg": 199,
+   "scale": 0.98
+  },
+  {
+   "type": "bush_large",
+   "pos": [
+    45.5,
+    -46.8
+   ],
+   "yaw_deg": 150,
+   "scale": 0.96
+  },
+  {
+   "type": "bush",
+   "pos": [
+    45.15,
+    -40.17
+   ],
+   "yaw_deg": 94,
+   "scale": 0.93
+  },
+  {
+   "type": "bush_large",
+   "pos": [
+    45.83,
+    -34.15
+   ],
+   "yaw_deg": 270,
+   "scale": 1.06
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    52.21,
+    -69.07
+   ],
+   "yaw_deg": 95,
+   "scale": 1.0
+  },
+  {
+   "type": "tree_default",
+   "pos": [
+    51.87,
+    -64.35
+   ],
+   "yaw_deg": 52,
+   "scale": 1.08
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    63.67,
+    -52.26
+   ],
+   "yaw_deg": 53,
+   "scale": 1.05
+  },
+  {
+   "type": "bush",
+   "pos": [
+    69.73,
+    -69.37
+   ],
+   "yaw_deg": 100,
+   "scale": 0.92
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    69.49,
+    -63.12
+   ],
+   "yaw_deg": 238,
+   "scale": 0.98
+  },
+  {
+   "type": "bush_large",
+   "pos": [
+    69.27,
+    -58.99
+   ],
+   "yaw_deg": 195,
+   "scale": 1.19
+  },
+  {
+   "type": "fence",
+   "pos": [
+    35.5,
+    -33.2
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    38.38,
+    -33.2
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    41.26,
+    -33.2
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    44.14,
+    -33.2
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    47.02,
+    -33.2
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    55.0,
+    -33.2
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    57.88,
+    -33.2
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    60.76,
+    -33.2
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    63.64,
+    -33.2
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    66.52,
+    -33.2
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    33.2,
+    -49.0
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    33.2,
+    -46.12
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    33.2,
+    -43.24
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    33.2,
+    -40.36
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    33.2,
+    -37.48
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    34.28,
+    -5.47
+   ],
+   "yaw_deg": 45,
+   "scale": 1.05
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    34.04,
+    -0.9
+   ],
+   "yaw_deg": 215,
+   "scale": 1.2
+  },
+  {
+   "type": "bush",
+   "pos": [
+    33.54,
+    5.19
+   ],
+   "yaw_deg": 244,
+   "scale": 1.0
+  },
+  {
+   "type": "bush",
+   "pos": [
+    33.18,
+    11.71
+   ],
+   "yaw_deg": 42,
+   "scale": 0.85
+  },
+  {
+   "type": "tree_fat",
+   "pos": [
+    40.12,
+    -17.09
+   ],
+   "yaw_deg": 264,
+   "scale": 0.88
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    46.72,
+    0.88
+   ],
+   "yaw_deg": 338,
+   "scale": 1.08
+  },
+  {
+   "type": "bush_large",
+   "pos": [
+    52.83,
+    -12.24
+   ],
+   "yaw_deg": 85,
+   "scale": 1.16
+  },
+  {
+   "type": "bush_large",
+   "pos": [
+    52.67,
+    -6.85
+   ],
+   "yaw_deg": 189,
+   "scale": 0.93
+  },
+  {
+   "type": "bush",
+   "pos": [
+    69.03,
+    -17.38
+   ],
+   "yaw_deg": 43,
+   "scale": 0.94
+  },
+  {
+   "type": "bush",
+   "pos": [
+    69.59,
+    -5.21
+   ],
+   "yaw_deg": 359,
+   "scale": 1.05
+  },
+  {
+   "type": "tree_oak",
+   "pos": [
+    69.75,
+    -0.26
+   ],
+   "yaw_deg": 244,
+   "scale": 1.04
+  },
+  {
+   "type": "fence",
+   "pos": [
+    35.5,
+    18.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    38.38,
+    18.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    41.26,
+    18.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    44.14,
+    18.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    47.02,
+    18.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    55.0,
+    18.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    57.88,
+    18.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    60.76,
+    18.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    63.64,
+    18.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    66.52,
+    18.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    33.2,
+    -16.5
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    33.2,
+    -13.62
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    33.2,
+    -10.74
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    33.2,
+    -7.86
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    33.2,
+    -4.98
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    33.2,
+    3.0
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    33.2,
+    5.88
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    33.2,
+    8.76
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    33.2,
+    11.64
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    33.2,
+    14.52
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "bush",
+   "pos": [
+    33.02,
+    34.54
+   ],
+   "yaw_deg": 214,
+   "scale": 0.93
+  },
+  {
+   "type": "tree_fat",
+   "pos": [
+    52.66,
+    69.28
+   ],
+   "yaw_deg": 179,
+   "scale": 0.87
+  },
+  {
+   "type": "bush_large",
+   "pos": [
+    57.08,
+    34.48
+   ],
+   "yaw_deg": 59,
+   "scale": 0.97
+  },
+  {
+   "type": "bush_large",
+   "pos": [
+    63.78,
+    34.26
+   ],
+   "yaw_deg": 125,
+   "scale": 1.1
+  },
+  {
+   "type": "fence",
+   "pos": [
+    35.5,
+    70.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    38.38,
+    70.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    41.26,
+    70.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    44.14,
+    70.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    47.02,
+    70.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    55.0,
+    70.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    57.88,
+    70.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    60.76,
+    70.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    63.64,
+    70.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    66.52,
+    70.8
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "type": "fence",
+   "pos": [
+    33.2,
+    35.5
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    33.2,
+    38.38
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    33.2,
+    41.26
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    33.2,
+    44.14
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    33.2,
+    47.02
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    33.2,
+    55.0
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    33.2,
+    57.88
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    33.2,
+    60.76
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    33.2,
+    63.64
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "fence",
+   "pos": [
+    33.2,
+    66.52
+   ],
+   "yaw_deg": 90
+  },
+  {
+   "type": "palm",
+   "pos": [
+    88.06,
+    -84.23
+   ],
+   "yaw_deg": 295,
+   "scale": 0.98
+  },
+  {
+   "type": "palm",
+   "pos": [
+    88.9,
+    -71.56
+   ],
+   "yaw_deg": 32,
+   "scale": 1.15
+  },
+  {
+   "type": "palm",
+   "pos": [
+    88.18,
+    -57.83
+   ],
+   "yaw_deg": 235,
+   "scale": 1.01
+  },
+  {
+   "type": "palm",
+   "pos": [
+    88.05,
+    -41.84
+   ],
+   "yaw_deg": 35,
+   "scale": 1.23
+  },
+  {
+   "type": "palm",
+   "pos": [
+    88.36,
+    -28.91
+   ],
+   "yaw_deg": 207,
+   "scale": 1.16
+  },
+  {
+   "type": "palm",
+   "pos": [
+    87.52,
+    -14.81
+   ],
+   "yaw_deg": 0,
+   "scale": 1.21
+  },
+  {
+   "type": "palm",
+   "pos": [
+    87.65,
+    0.63
+   ],
+   "yaw_deg": 254,
+   "scale": 1.06
+  },
+  {
+   "type": "palm",
+   "pos": [
+    87.31,
+    12.87
+   ],
+   "yaw_deg": 134,
+   "scale": 1.01
+  },
+  {
+   "type": "palm",
+   "pos": [
+    88.22,
+    27.83
+   ],
+   "yaw_deg": 76,
+   "scale": 1.02
+  },
+  {
+   "type": "palm",
+   "pos": [
+    87.16,
+    41.7
+   ],
+   "yaw_deg": 318,
+   "scale": 1.08
+  },
+  {
+   "type": "palm",
+   "pos": [
+    87.79,
+    54.79
+   ],
+   "yaw_deg": 251,
+   "scale": 0.96
+  },
+  {
+   "type": "palm",
+   "pos": [
+    88.0,
+    71.74
+   ],
+   "yaw_deg": 176,
+   "scale": 1.22
+  },
+  {
+   "type": "palm",
+   "pos": [
+    87.29,
+    83.07
+   ],
+   "yaw_deg": 252,
+   "scale": 1.08
+  },
+  {
+   "type": "boat",
+   "pos": [
+    99,
+    -30
+   ],
+   "yaw_deg": 20,
+   "y": -0.35
+  },
+  {
+   "type": "boat",
+   "pos": [
+    104,
+    -22
+   ],
+   "yaw_deg": 70,
+   "y": -0.35
+  },
+  {
+   "type": "boat",
+   "pos": [
+    97,
+    18
+   ],
+   "yaw_deg": 120,
+   "y": -0.35
+  },
+  {
+   "type": "boat",
+   "pos": [
+    102,
+    44
+   ],
+   "yaw_deg": 200,
+   "y": -0.35
+  },
+  {
+   "type": "boat",
+   "pos": [
+    112,
+    60
+   ],
+   "yaw_deg": 300,
+   "y": -0.35
+  }
+ ],
+ "decor_types": {
+  "tree_oak": {
+   "model": "res://assets/models/nature/tree_oak.glb",
+   "scale": 6.5,
+   "shadow": 0.75,
+   "collision": {
+    "radius": 0.6,
+    "height": 7
+   }
+  },
+  "tree_default": {
+   "model": "res://assets/models/nature/tree_default.glb",
+   "scale": 5.5,
+   "shadow": 0.8,
+   "colors": {
+    "leafsGreen": [
+     0.33,
+     0.57,
+     0.4
+    ]
+   },
+   "collision": {
+    "radius": 0.6,
+    "height": 8
+   }
+  },
+  "tree_fat": {
+   "model": "res://assets/models/nature/tree_fat.glb",
+   "scale": 6,
+   "shadow": 0.8,
+   "colors": {
+    "leafsGreen": [
+     0.55,
+     0.72,
+     0.33
+    ]
+   },
+   "collision": {
+    "radius": 0.6,
+    "height": 6
+   }
+  },
+  "palm": {
+   "model": "res://assets/models/nature/tree_palmTall.glb",
+   "scale": 6.5,
+   "shadow": 0.6,
+   "collision": {
+    "radius": 0.5,
+    "height": 8
+   }
+  },
+  "bush": {
+   "model": "res://assets/models/nature/plant_bush.glb",
+   "scale": 3.2
+  },
+  "bush_large": {
+   "model": "res://assets/models/nature/plant_bushLarge.glb",
+   "scale": 4
+  },
+  "boat": {
+   "model": "res://assets/models/nature/canoe.glb",
+   "scale": 9,
+   "sinks": true,
+   "colors": {
+    "wood": [
+     0.93,
+     0.92,
+     0.88
+    ],
+    "leafsFall": [
+     0.78,
+     0.32,
+     0.27
+    ]
+   },
+   "collision": {
+    "radius": 2.5,
+    "height": 2.5
+   }
+  },
+  "fence": {
+   "model": "res://assets/models/suburban/fence.glb",
+   "scale": 6,
+   "palette": 0
+  }
+ },
+ "decor_colors": {
+  "leafsGreen": [
+   0.42,
+   0.66,
+   0.36
+  ],
+  "woodBark": [
+   0.55,
+   0.4,
+   0.3
+  ],
+  "grass": [
+   0.46,
+   0.68,
+   0.38
+  ]
+ },
+ "poles": {
+  "height": 9,
+  "arm": 1.3,
+  "spacing": 24,
+  "sag": 0.8,
+  "color": [
+   0.42,
+   0.34,
+   0.3
+  ],
+  "wire_color": [
+   0.25,
+   0.24,
+   0.3
+  ],
+  "runs": [
+   {
+    "from": [
+     -34.5,
+     88
+    ],
+    "to": [
+     -34.5,
+     -88
+    ]
+   },
+   {
+    "from": [
+     18,
+     88
+    ],
+    "to": [
+     18,
+     -88
+    ]
+   },
+   {
+    "from": [
+     -82,
+     33.5
+    ],
+    "to": [
+     82,
+     33.5
+    ]
+   }
+  ]
+ },
+ "pier": {
+  "color": [
+   0.6,
+   0.45,
+   0.34
+  ],
+  "boxes": [
+   {
+    "size": [
+     26,
+     0.5,
+     5
+    ],
+    "pos": [
+     104,
+     0.3,
+     -4
+    ]
+   },
+   {
+    "size": [
+     0.7,
+     2.4,
+     0.7
+    ],
+    "pos": [
+     96,
+     -0.7,
+     -6.2
+    ]
+   },
+   {
+    "size": [
+     0.7,
+     2.4,
+     0.7
+    ],
+    "pos": [
+     96,
+     -0.7,
+     -1.8
+    ]
+   },
+   {
+    "size": [
+     0.7,
+     2.4,
+     0.7
+    ],
+    "pos": [
+     102,
+     -0.7,
+     -6.2
+    ]
+   },
+   {
+    "size": [
+     0.7,
+     2.4,
+     0.7
+    ],
+    "pos": [
+     102,
+     -0.7,
+     -1.8
+    ]
+   },
+   {
+    "size": [
+     0.7,
+     2.4,
+     0.7
+    ],
+    "pos": [
+     108,
+     -0.7,
+     -6.2
+    ]
+   },
+   {
+    "size": [
+     0.7,
+     2.4,
+     0.7
+    ],
+    "pos": [
+     108,
+     -0.7,
+     -1.8
+    ]
+   },
+   {
+    "size": [
+     0.7,
+     2.4,
+     0.7
+    ],
+    "pos": [
+     114,
+     -0.7,
+     -6.2
+    ]
+   },
+   {
+    "size": [
+     0.7,
+     2.4,
+     0.7
+    ],
+    "pos": [
+     114,
+     -0.7,
+     -1.8
+    ]
+   }
+  ]
+ },
+ "scenery": {
+  "far_land": {
+   "size": [
+    1100,
+    1300
+   ],
+   "pos": [
+    -458,
+    -0.2,
+    0
+   ],
+   "color": [
+    0.6,
+    0.74,
+    0.45
+   ]
+  },
+  "hill_colors": {
+   "near": [
+    0.45,
+    0.62,
+    0.4
+   ],
+   "mid": [
+    0.56,
+    0.72,
+    0.62
+   ],
+   "far": [
+    0.7,
+    0.82,
+    0.86
+   ]
+  },
+  "hills": [
+   {
+    "layer": "far",
+    "pos": [
+     -472.96,
+     -20,
+     -520
+    ],
+    "size": [
+     170,
+     146.13,
+     150
+    ]
+   },
+   {
+    "layer": "far",
+    "pos": [
+     -498.92,
+     -20,
+     -400
+    ],
+    "size": [
+     170,
+     180.66,
+     150
+    ]
+   },
+   {
+    "layer": "far",
+    "pos": [
+     -509.49,
+     -20,
+     -280
+    ],
+    "size": [
+     170,
+     155.19,
+     150
+    ]
+   },
+   {
+    "layer": "far",
+    "pos": [
+     -438.14,
+     -20,
+     -160
+    ],
+    "size": [
+     170,
+     125.66,
+     150
+    ]
+   },
+   {
+    "layer": "far",
+    "pos": [
+     -465.66,
+     -20,
+     -40
+    ],
+    "size": [
+     170,
+     163.17,
+     150
+    ]
+   },
+   {
+    "layer": "far",
+    "pos": [
+     -506.73,
+     -20,
+     80
+    ],
+    "size": [
+     170,
+     146.53,
+     150
+    ]
+   },
+   {
+    "layer": "far",
+    "pos": [
+     -453.72,
+     -20,
+     200
+    ],
+    "size": [
+     170,
+     151.64,
+     150
+    ]
+   },
+   {
+    "layer": "far",
+    "pos": [
+     -451.99,
+     -20,
+     320
+    ],
+    "size": [
+     170,
+     131.0,
+     150
+    ]
+   },
+   {
+    "layer": "far",
+    "pos": [
+     -490.96,
+     -20,
+     440
+    ],
+    "size": [
+     170,
+     127.77,
+     150
+    ]
+   },
+   {
+    "layer": "mid",
+    "pos": [
+     -299.62,
+     -14,
+     -420
+    ],
+    "size": [
+     120,
+     111.57,
+     100
+    ]
+   },
+   {
+    "layer": "mid",
+    "pos": [
+     -294.57,
+     -14,
+     -330
+    ],
+    "size": [
+     120,
+     104.84,
+     100
+    ]
+   },
+   {
+    "layer": "mid",
+    "pos": [
+     -306.98,
+     -14,
+     -240
+    ],
+    "size": [
+     120,
+     103.57,
+     100
+    ]
+   },
+   {
+    "layer": "mid",
+    "pos": [
+     -323.9,
+     -14,
+     -150
+    ],
+    "size": [
+     120,
+     83.1,
+     100
+    ]
+   },
+   {
+    "layer": "mid",
+    "pos": [
+     -289.55,
+     -14,
+     -60
+    ],
+    "size": [
+     120,
+     102.66,
+     100
+    ]
+   },
+   {
+    "layer": "mid",
+    "pos": [
+     -304.69,
+     -14,
+     30
+    ],
+    "size": [
+     120,
+     73.95,
+     100
+    ]
+   },
+   {
+    "layer": "mid",
+    "pos": [
+     -314.0,
+     -14,
+     120
+    ],
+    "size": [
+     120,
+     79.45,
+     100
+    ]
+   },
+   {
+    "layer": "mid",
+    "pos": [
+     -313.13,
+     -14,
+     210
+    ],
+    "size": [
+     120,
+     106.43,
+     100
+    ]
+   },
+   {
+    "layer": "mid",
+    "pos": [
+     -318.03,
+     -14,
+     300
+    ],
+    "size": [
+     120,
+     109.89,
+     100
+    ]
+   },
+   {
+    "layer": "mid",
+    "pos": [
+     -277.24,
+     -14,
+     390
+    ],
+    "size": [
+     120,
+     72.47,
+     100
+    ]
+   },
+   {
+    "layer": "near",
+    "pos": [
+     -168.64,
+     -8,
+     -250
+    ],
+    "size": [
+     70,
+     40.82,
+     58
+    ]
+   },
+   {
+    "layer": "near",
+    "pos": [
+     -179.3,
+     -8,
+     -180
+    ],
+    "size": [
+     70,
+     39.34,
+     58
+    ]
+   },
+   {
+    "layer": "near",
+    "pos": [
+     -152.81,
+     -8,
+     -110
+    ],
+    "size": [
+     70,
+     32.47,
+     58
+    ]
+   },
+   {
+    "layer": "near",
+    "pos": [
+     -162.09,
+     -8,
+     -40
+    ],
+    "size": [
+     70,
+     32.67,
+     58
+    ]
+   },
+   {
+    "layer": "near",
+    "pos": [
+     -162.64,
+     -8,
+     30
+    ],
+    "size": [
+     70,
+     49.7,
+     58
+    ]
+   },
+   {
+    "layer": "near",
+    "pos": [
+     -173.91,
+     -8,
+     100
+    ],
+    "size": [
+     70,
+     30.18,
+     58
+    ]
+   },
+   {
+    "layer": "near",
+    "pos": [
+     -177.49,
+     -8,
+     170
+    ],
+    "size": [
+     70,
+     41.87,
+     58
+    ]
+   },
+   {
+    "layer": "near",
+    "pos": [
+     -179.48,
+     -8,
+     240
+    ],
+    "size": [
+     70,
+     31.87,
+     58
+    ]
+   },
+   {
+    "layer": "mid",
+    "pos": [
+     -420,
+     -14,
+     -330.2
+    ],
+    "size": [
+     100,
+     116.05,
+     90
+    ]
+   },
+   {
+    "layer": "mid",
+    "pos": [
+     -420,
+     -14,
+     325.21
+    ],
+    "size": [
+     100,
+     89.91,
+     90
+    ]
+   },
+   {
+    "layer": "mid",
+    "pos": [
+     -330,
+     -14,
+     -321.68
+    ],
+    "size": [
+     100,
+     74.67,
+     90
+    ]
+   },
+   {
+    "layer": "mid",
+    "pos": [
+     -330,
+     -14,
+     334.79
+    ],
+    "size": [
+     100,
+     78.63,
+     90
+    ]
+   },
+   {
+    "layer": "mid",
+    "pos": [
+     -240,
+     -14,
+     -323.47
+    ],
+    "size": [
+     100,
+     117.92,
+     90
+    ]
+   },
+   {
+    "layer": "mid",
+    "pos": [
+     -240,
+     -14,
+     303.25
+    ],
+    "size": [
+     100,
+     97.75,
+     90
+    ]
+   },
+   {
+    "layer": "mid",
+    "pos": [
+     -150,
+     -14,
+     -323.62
+    ],
+    "size": [
+     100,
+     77.47,
+     90
+    ]
+   },
+   {
+    "layer": "mid",
+    "pos": [
+     -150,
+     -14,
+     316.1
+    ],
+    "size": [
+     100,
+     119.74,
+     90
+    ]
+   },
+   {
+    "layer": "mid",
+    "pos": [
+     -60,
+     -14,
+     -300.12
+    ],
+    "size": [
+     100,
+     76.07,
+     90
+    ]
+   },
+   {
+    "layer": "mid",
+    "pos": [
+     -60,
+     -14,
+     342.33
+    ],
+    "size": [
+     100,
+     117.55,
+     90
+    ]
+   },
+   {
+    "layer": "mid",
+    "pos": [
+     30,
+     -14,
+     -345.79
+    ],
+    "size": [
+     100,
+     100.56,
+     90
+    ]
+   },
+   {
+    "layer": "mid",
+    "pos": [
+     30,
+     -14,
+     302.58
+    ],
+    "size": [
+     100,
+     88.3,
+     90
+    ]
+   },
+   {
+    "layer": "near",
+    "pos": [
+     -126.52,
+     -8,
+     -170
+    ],
+    "size": [
+     60,
+     37.81,
+     48
+    ]
+   },
+   {
+    "layer": "near",
+    "pos": [
+     -124.51,
+     -8,
+     170
+    ],
+    "size": [
+     60,
+     27.73,
+     48
+    ]
+   },
+   {
+    "layer": "near",
+    "pos": [
+     -63.06,
+     -8,
+     -170
+    ],
+    "size": [
+     60,
+     43.28,
+     48
+    ]
+   },
+   {
+    "layer": "near",
+    "pos": [
+     -58.32,
+     -8,
+     170
+    ],
+    "size": [
+     60,
+     35.03,
+     48
+    ]
+   },
+   {
+    "layer": "near",
+    "pos": [
+     8.04,
+     -8,
+     -170
+    ],
+    "size": [
+     60,
+     45.72,
+     48
+    ]
+   },
+   {
+    "layer": "near",
+    "pos": [
+     11.49,
+     -8,
+     170
+    ],
+    "size": [
+     60,
+     26.37,
+     48
+    ]
+   },
+   {
+    "layer": "near",
+    "pos": [
+     85.99,
+     -8,
+     -170
+    ],
+    "size": [
+     60,
+     32.57,
+     48
+    ]
+   },
+   {
+    "layer": "near",
+    "pos": [
+     78.67,
+     -8,
+     170
+    ],
+    "size": [
+     60,
+     30.27,
+     48
+    ]
+   }
+  ],
+  "clouds": [
+   {
+    "texture": "res://assets/textures/cloud_0.png",
+    "pos": [
+     -640,
+     120,
+     -260
+    ],
+    "size": [
+     520,
+     260.0
+    ]
+   },
+   {
+    "texture": "res://assets/textures/cloud_1.png",
+    "pos": [
+     -620,
+     170,
+     180
+    ],
+    "size": [
+     760,
+     380.0
+    ]
+   },
+   {
+    "texture": "res://assets/textures/cloud_2.png",
+    "pos": [
+     -180,
+     160,
+     -640
+    ],
+    "size": [
+     700,
+     350.0
+    ]
+   },
+   {
+    "texture": "res://assets/textures/cloud_0.png",
+    "pos": [
+     300,
+     120,
+     -600
+    ],
+    "size": [
+     560,
+     280.0
+    ]
+   },
+   {
+    "texture": "res://assets/textures/cloud_1.png",
+    "pos": [
+     640,
+     100,
+     -280
+    ],
+    "size": [
+     520,
+     260.0
+    ]
+   },
+   {
+    "texture": "res://assets/textures/cloud_2.png",
+    "pos": [
+     720,
+     160,
+     60
+    ],
+    "size": [
+     760,
+     380.0
+    ]
+   },
+   {
+    "texture": "res://assets/textures/cloud_0.png",
+    "pos": [
+     560,
+     110,
+     400
+    ],
+    "size": [
+     560,
+     280.0
+    ]
+   },
+   {
+    "texture": "res://assets/textures/cloud_1.png",
+    "pos": [
+     40,
+     160,
+     660
+    ],
+    "size": [
+     720,
+     360.0
+    ]
+   },
+   {
+    "texture": "res://assets/textures/cloud_2.png",
+    "pos": [
+     -340,
+     120,
+     600
+    ],
+    "size": [
+     560,
+     280.0
+    ]
+   }
+  ]
  }
 }

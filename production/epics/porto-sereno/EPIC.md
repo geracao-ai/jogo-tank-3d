@@ -31,3 +31,4 @@ Fora de escopo: ver "Out of scope" em `design/game-brief.md`.
 | 005b | Controles de toque no Android | UI | Ready | N/A |
 | 006 | Marcas permanentes | Visual/Feel | Ready | N/A |
 | 007 | Visual Ghibli e som | Visual/Feel | Ready | N/A |
+| 008 | Estilo da cidade | Visual/Feel | Ready | N/A |

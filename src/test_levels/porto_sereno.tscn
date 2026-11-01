@@ -18,6 +18,9 @@
 
 [sub_resource type="ShaderMaterial" id="sky_material"]
 shader = ExtResource("s1")
+shader_parameter/zenith_color = Color(0.3, 0.58, 0.9, 1)
+shader_parameter/horizon_color = Color(0.82, 0.91, 0.95, 1)
+shader_parameter/cloud_coverage = 0.66
 
 [sub_resource type="Sky" id="sky"]
 sky_material = SubResource("sky_material")
@@ -28,7 +31,7 @@ background_mode = 2
 sky = SubResource("sky")
 ambient_light_source = 2
 reflected_light_source = 1
-ambient_light_color = Color(0.8, 0.83, 0.9, 1)
+ambient_light_color = Color(0.84, 0.82, 0.92, 1)
 ambient_light_energy = 1.0
 
 [node name="PortoSereno" type="Node3D"]
@@ -38,7 +41,7 @@ environment = SubResource("env")
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
 light_color = Color(1, 0.95, 0.84, 1)
-light_energy = 0.36
+light_energy = 0.34
 transform = Transform3D(1, 0, 0, 0, 0.7071, 0.7071, 0, -0.7071, 0.7071, 0, 10, 0)
 
 [node name="City" type="Node3D" parent="." node_paths=PackedStringArray("tank")]
@@ -71,7 +74,7 @@ tuning = ExtResource("a2")
 [node name="FollowCamera" type="Camera3D" parent="." node_paths=PackedStringArray("target")]
 transform = Transform3D(1, 0, 0, 0, 0.8192, 0.5736, 0, -0.5736, 0.8192, 0, 5, 9)
 fov = 60.0
-far = 400.0
+far = 900.0
 script = ExtResource("2")
 target = NodePath("../Tank")
 tuning = ExtResource("3")

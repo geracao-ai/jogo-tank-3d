@@ -6,7 +6,8 @@ extends Node3D
 ## Rubble is not made here: it is the Destroyed stage of the Destructible itself.
 ##
 ## Listens only; Cannon, Destructible and CityBuilder do not know this node. Craters are a
-## ring of reused flat discs (cap in tuning); nothing fades with time. Smoke is one
+## ring of flat discs in one MultiMesh, a single draw call (cap in tuning); nothing fades with
+## time. Smoke is one
 ## CPUParticles3D per Destructible, kept until the game closes. No save.
 ## Keep this node at the scene root's origin: marks are placed in world coordinates.
 
@@ -19,10 +20,10 @@ extends Node3D
 ## Marks tuning (see marks_tuning.gd / marks_tuning.tres).
 @export var tuning: MarksTuning
 
-var _craters: Array[MeshInstance3D] = []
+var _craters: MultiMesh
+var _crater_count: int = 0
 var _next_crater: int = 0
 var _smokes: Dictionary[Destructible, CPUParticles3D] = {}
-var _crater_mesh: CylinderMesh
 var _smoke_mesh: QuadMesh
 var _smoke_gradient: Gradient
 var _rng := RandomNumberGenerator.new()
@@ -30,16 +31,25 @@ var _rng := RandomNumberGenerator.new()
 
 func _ready() -> void:
 	_rng.randomize()
-	_crater_mesh = CylinderMesh.new()
-	_crater_mesh.top_radius = 1.0
-	_crater_mesh.bottom_radius = 1.0
-	_crater_mesh.height = 0.01
-	_crater_mesh.radial_segments = 16
-	_crater_mesh.rings = 1
+	var crater_mesh := CylinderMesh.new()
+	crater_mesh.top_radius = 1.0
+	crater_mesh.bottom_radius = 1.0
+	crater_mesh.height = 0.01
+	crater_mesh.radial_segments = 16
+	crater_mesh.rings = 1
 	var crater_material := StandardMaterial3D.new()
 	crater_material.albedo_color = tuning.crater_color
 	crater_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED # keeps the palette colour exactly
-	_crater_mesh.material = crater_material
+	crater_mesh.material = crater_material
+	_craters = MultiMesh.new()
+	_craters.transform_format = MultiMesh.TRANSFORM_3D
+	_craters.mesh = crater_mesh
+	_craters.instance_count = tuning.crater_cap
+	_craters.visible_instance_count = 0
+	var crater_node := MultiMeshInstance3D.new()
+	crater_node.name = "Craters"
+	crater_node.multimesh = _craters
+	add_child(crater_node)
 
 	# A camera-facing quad with a soft round texture: 2 triangles per puff, for phones.
 	_smoke_mesh = QuadMesh.new()
@@ -71,7 +81,7 @@ func _ready() -> void:
 
 ## Number of craters currently placed (never above tuning.crater_cap).
 func get_crater_count() -> int:
-	return _craters.size()
+	return _crater_count
 
 
 ## Number of smoke emitters (one per Destructible that has left INTACT).
@@ -92,22 +102,17 @@ func _scan() -> void:
 
 
 func _on_projectile_impacted(position: Vector3, normal: Vector3, collider: Node3D) -> void:
-	if not collider is StaticBody3D or collider is Destructible:
+	if not collider is StaticBody3D or collider is Destructible or collider is CityProp:
 		return
 	if normal.y < tuning.crater_min_normal_y:
 		return
-	var crater: MeshInstance3D
-	if _craters.size() < tuning.crater_cap:
-		crater = MeshInstance3D.new()
-		crater.mesh = _crater_mesh
-		add_child(crater)
-		_craters.append(crater)
-	else:
-		crater = _craters[_next_crater]
-		_next_crater = (_next_crater + 1) % _craters.size()
+	var index: int = _next_crater
+	_next_crater = (_next_crater + 1) % tuning.crater_cap
+	_crater_count = mini(_crater_count + 1, tuning.crater_cap)
 	var radius: float = _rng.randf_range(tuning.crater_radius_min, tuning.crater_radius_max)
-	crater.scale = Vector3(radius, 1.0, radius)
-	crater.global_position = position + Vector3.UP * tuning.crater_y_offset
+	_craters.set_instance_transform(index, Transform3D(Basis.from_scale(Vector3(radius, 1.0, radius)),
+		position + Vector3.UP * tuning.crater_y_offset))
+	_craters.visible_instance_count = _crater_count
 
 
 func _on_stage_changed(new_stage: Destructible.Stage, obj: Destructible) -> void:
@@ -146,6 +151,8 @@ func _make_smoke(obj: Destructible) -> CPUParticles3D:
 
 ## Height of the highest mesh of a stage above the object's origin, in metres.
 func _top(obj: Destructible, stage: Node3D) -> float:
+	if stage.has_meta("top"): # a ruin's mesh is taller than what the shader keeps of it
+		return stage.get_meta("top")
 	var top: float = 0.0
 	var to_object: Transform3D = obj.global_transform.affine_inverse()
 	for node: Node in stage.find_children("*", "MeshInstance3D", true, false):

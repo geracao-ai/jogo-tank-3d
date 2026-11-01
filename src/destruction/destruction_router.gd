@@ -11,6 +11,8 @@ func _ready() -> void:
 	cannon.projectile_impacted.connect(_on_projectile_impacted)
 
 
-func _on_projectile_impacted(_position: Vector3, _normal: Vector3, collider: Node3D) -> void:
+func _on_projectile_impacted(position: Vector3, _normal: Vector3, collider: Node3D) -> void:
 	if collider is Destructible:
 		(collider as Destructible).take_hit()
+	elif collider is CityProp:
+		(collider as CityProp).take_hit(position)

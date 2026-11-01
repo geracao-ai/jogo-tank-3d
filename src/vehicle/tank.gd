@@ -38,6 +38,11 @@ func _physics_process(delta: float) -> void:
 	velocity.z = forward.z * _forward_speed
 	velocity.y = 0.0 if is_on_floor() else velocity.y + get_gravity().y * delta
 	move_and_slide()
+	# Light scenery gives way: the tank knocks it over instead of stopping at it.
+	for i: int in get_slide_collision_count():
+		var collider: Object = get_slide_collision(i).get_collider()
+		if collider is CityProp:
+			(collider as CityProp).take_hit(global_position)
 	speed_changed.emit(_forward_speed)
 
 

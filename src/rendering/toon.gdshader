@@ -1,12 +1,21 @@
 shader_type spatial;
 render_mode cull_back, specular_disabled;
 // Soft two-tone toon shading for the city, tank, rubble and sea.
-// Implements: design/game-brief.md, MVP feature 7 (story-007-visual-ghibli-e-som).
+// Implements: design/game-brief.md, MVP feature 7 (story-007-visual-ghibli-e-som); textured and
+// vertex-coloured surfaces added by story-008-estilo-da-cidade.
 // Lit part = albedo * (ambient + sun); shade part = albedo * ambient only, so the "second
 // tone" is set by the environment's ambient colour (a cool tint gives painted shadows).
 // No real-time shadows are used. Compatibility-safe: only light() + fragment() + vertex().
 
 uniform vec4 albedo : source_color = vec4(1.0);
+// Palette texture of kit models; white when unused. Vertex colours multiply in too (the tank).
+uniform sampler2D albedo_tex : source_color, hint_default_white, filter_linear, repeat_disable;
+// Painted darkening near the ground, in metres (0 disables it).
+uniform float ground_tint = 0.0;
+uniform float ground_tint_height = 3.0;
+// Tiled painted texture projected from above (streets, sidewalks, grass); 0 scale disables it.
+uniform sampler2D world_tex : source_color, hint_default_white, filter_linear_mipmap, repeat_enable;
+uniform float world_tex_scale = 0.0;
 // Light/shade boundary on N.L, and how soft that boundary is.
 uniform float band_threshold : hint_range(-1.0, 1.0) = 0.15;
 uniform float band_softness : hint_range(0.001, 1.0) = 0.25;
@@ -23,8 +32,14 @@ void vertex() {
 }
 
 void fragment() {
-	ALBEDO = albedo.rgb;
+	ALBEDO = albedo.rgb * COLOR.rgb * texture(albedo_tex, UV).rgb;
 	ROUGHNESS = 1.0;
+	if (world_tex_scale > 0.0) {
+		ALBEDO *= texture(world_tex, world_pos.xz * world_tex_scale).rgb;
+	}
+	if (ground_tint > 0.0) {
+		ALBEDO *= mix(1.0 - ground_tint, 1.0, smoothstep(0.0, ground_tint_height, world_pos.y));
+	}
 	if (shimmer_strength > 0.0) {
 		float a = sin(world_pos.x * shimmer_scale + TIME * shimmer_speed);
 		float b = sin(world_pos.z * shimmer_scale * 1.3 - TIME * shimmer_speed * 0.8 + a);

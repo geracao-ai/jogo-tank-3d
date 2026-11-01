@@ -3,8 +3,12 @@ config_version=5
 [application]
 
 config/name="Porto Sereno"
-run/main_scene="res://src/test_levels/gray_ground.tscn"
+run/main_scene="res://src/test_levels/porto_sereno.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
+
+[input_devices]
+
+pointing/emulate_mouse_from_touch=false
 
 [physics]
 

@@ -6,6 +6,8 @@ extends Node3D
 ## Aim: each physics tick a ray from the active camera through the mouse position; the first
 ## hit is the aim point (or a point aim_ray_length away). The barrel turns toward it at
 ## tuning.turn_speed, so the shot follows the BARREL, which may lag the cursor.
+## Touch: set_manual_turn() turns the turret directly instead, ignoring the mouse, and the
+## crosshair then shows where the barrel points.
 ## Controls: left mouse button / Space / gamepad right shoulder. Read in _physics_process, so a paused
 ## tree never fires.
 
@@ -19,6 +21,8 @@ signal projectile_impacted(position: Vector3, normal: Vector3, collider: Node3D)
 @export var projectile_scene: PackedScene
 
 var _cooldown: float = 0.0
+var _manual: bool = false
+var _manual_turn: Vector2
 
 @onready var _tank: CollisionObject3D = get_parent()
 @onready var _pitch: Node3D = $Pitch
@@ -30,16 +34,61 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	_aim(_find_aim_point(), delta)
+	if _manual:
+		_turn_manually(delta)
+	else:
+		_aim(_find_aim_point(), delta)
 	_cooldown = maxf(_cooldown - delta, 0.0)
 	if _cooldown <= 0.0 and Input.is_action_pressed("cannon_fire"):
 		_fire()
 
 
-## World point under the mouse cursor (first surface hit, tank excluded).
+## Turns the turret directly, from now on ignoring the mouse. [param turn] is -1..1 of
+## tuning.turn_speed: x positive turns right, y positive raises the barrel.
+func set_manual_turn(turn: Vector2) -> void:
+	_manual = true
+	_manual_turn = turn
+
+
+## Turret angle relative to the hull, in radians: 0 is ahead, positive is to the left.
+func get_turret_yaw() -> float:
+	return rotation.y
+
+
+## False when the barrel points behind the camera, where no crosshair can show it.
+func is_aim_on_screen() -> bool:
+	return not _manual or not get_viewport().get_camera_3d().is_position_behind(_barrel_point())
+
+
+## Screen position (viewport pixels) of the aim: where the barrel points under manual turn,
+## else the mouse cursor.
+func get_aim_screen_position() -> Vector2:
+	if _manual:
+		return get_viewport().get_camera_3d().unproject_position(_barrel_point())
+	return get_viewport().get_mouse_position()
+
+
+func _turn_manually(delta: float) -> void:
+	var step: float = deg_to_rad(tuning.turn_speed) * delta
+	rotation.y -= _manual_turn.x * step
+	_pitch.rotation.x = clampf(_pitch.rotation.x + _manual_turn.y * step,
+		deg_to_rad(tuning.pitch_min), deg_to_rad(tuning.pitch_max))
+
+
+## First surface along the barrel (tank excluded), or the end of the shell's range.
+func _barrel_point() -> Vector3:
+	var from: Vector3 = _pitch.global_position
+	var to: Vector3 = from - _muzzle.global_basis.z * tuning.max_range
+	var query := PhysicsRayQueryParameters3D.create(from, to)
+	query.exclude = [_tank.get_rid()]
+	var hit: Dictionary = get_world_3d().direct_space_state.intersect_ray(query)
+	return hit.position if not hit.is_empty() else to
+
+
+## World point under the aim screen position (first surface hit, tank excluded).
 func _find_aim_point() -> Vector3:
 	var camera: Camera3D = get_viewport().get_camera_3d()
-	var mouse: Vector2 = get_viewport().get_mouse_position()
+	var mouse: Vector2 = get_aim_screen_position()
 	var from: Vector3 = camera.project_ray_origin(mouse)
 	var to: Vector3 = from + camera.project_ray_normal(mouse) * tuning.aim_ray_length
 	var query := PhysicsRayQueryParameters3D.create(from, to)

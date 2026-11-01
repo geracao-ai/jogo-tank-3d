@@ -1,0 +1,9 @@
+Reviewed-Content-Hash: src/ui/touch_controls.gd 47bddd517a63d9b75afc43350313518da9d3f481
+Reviewed-Content-Hash: src/ui/touch_controls.tscn ac83b832460085637bab6b55e4fa2d2b6868a225
+Reviewed-Content-Hash: src/ui/touch_controls_tuning.gd ac2d678039ae9992740d54ca7811e836ac7bc6d2
+Reviewed-Content-Hash: src/ui/touch_controls_tuning.tres 12145c8811e5337ee47bfea0a63014a06560f26b
+Reviewed-Content-Hash: src/ui/turret_dial.gd d7219bcb4ea4eeab07ee4a29122b355a96043bae
+Reviewed-Content-Hash: src/ui/crosshair.gd e1f7089cd3a391018d6513423812fad07c0e3e18
+Reviewed-Content-Hash: src/vehicle/cannon.gd 56bd70debbff552a77666942018376cc61324170
+Reviewed-Content-Hash: src/test_levels/porto_sereno.tscn 88d5f1d7158d310ad2f0a735dc3e6f059984718c
+Reviewed-Content-Hash: project.godot 472e2d58cb45d8bc3814225c5ee200b744834051

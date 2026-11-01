@@ -1,0 +1,6 @@
+Reviewed-Content-Hash: src/destruction/destructible.gd f928b706be63b42959c6e918f72f65867e59d12b
+Reviewed-Content-Hash: src/destruction/destructible_tuning.gd d542b89247c9908d5a6b92907aee52445727791b
+Reviewed-Content-Hash: src/destruction/destructible_tuning.tres ef11079c221c7a65d5e88e3ad29900ac9eafaf1a
+Reviewed-Content-Hash: src/destruction/destruction_router.gd 37b58cd676a3487f17ad5705d53155676ac77534
+Reviewed-Content-Hash: src/test_levels/single_building.tscn 77dbf82388597c3594fabbeeaa80cd651506789d
+Reviewed-Content-Hash: src/vehicle/cannon.gd dad60eee5aaa74bc1ab016d2dde3ab512e8422d5

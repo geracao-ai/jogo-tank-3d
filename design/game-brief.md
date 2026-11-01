@@ -34,9 +34,10 @@
 1. Tanque dirigindo em um cenário cinza, para provar que é gostoso de guiar
 2. Canhão e um prédio com os três estágios de destruição, para provar a parte mais arriscada
 3. Cidade completa em blocos simples, com tudo destrutível
-4. Marcas permanentes: crateras, escombros e fumaça
-5. Visual Ghibli
-6. Áudio
+4. Controles de toque para Android (pós-MVP, pedido após testar no celular)
+5. Marcas permanentes: crateras, escombros e fumaça
+6. Visual Ghibli
+7. Áudio
 
 ---
 **Who it's for / what they feel:** Quem gosta de passear sem pressa em mundos bonitos; sente calma, depois o prazer da destruição, depois um pouco de culpa.

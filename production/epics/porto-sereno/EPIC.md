@@ -15,6 +15,8 @@ MVP do brief, na ordem do Build order:
 - Marcas permanentes na sessão (crateras, escombros, fumaça)
 - Visual Ghibli e som
 
+Pós-MVP, depois da cidade: controles de toque para jogar no Android.
+
 Fora de escopo: ver "Out of scope" em `design/game-brief.md`.
 
 ## Stories
@@ -26,5 +28,6 @@ Fora de escopo: ver "Out of scope" em `design/game-brief.md`.
 | 003 | Canhão com mira e disparo | Integration | Ready | N/A |
 | 004 | Destruição em estágios | Integration | Ready | N/A |
 | 005 | Cidade costeira completa | Visual/Feel | Ready | N/A |
+| 005b | Controles de toque no Android | UI | Ready | N/A |
 | 006 | Marcas permanentes | Visual/Feel | Ready | N/A |
 | 007 | Visual Ghibli e som | Visual/Feel | Ready | N/A |

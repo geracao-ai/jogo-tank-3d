@@ -18,3 +18,9 @@ extends Resource
 @export var rotation_smoothing: float = 3.5
 ## Lowest world Y the camera may reach, keeps it above the ground plane (m).
 @export var min_camera_y: float = 1.0
+## Radius of the sphere swept from the tank to the camera; also the gap kept from walls (m).
+@export var collision_margin: float = 0.5
+## How quickly the camera eases back out after a wall stops blocking it (1/s). Pulling in is immediate.
+@export var release_smoothing: float = 2.5
+## Physics layers the camera treats as walls.
+@export_flags_3d_physics var collision_mask: int = 1

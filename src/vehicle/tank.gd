@@ -3,7 +3,7 @@ extends CharacterBody3D
 ## Drivable tank: gradual acceleration, brake, reverse, speed-dependent turning.
 ## Implements: design/game-brief.md, build order 1 (story-001-tanque-dirigivel).
 ## Arcade model on CharacterBody3D (not a rigid-body vehicle) for predictable feel.
-## Controls: WASD / arrows, Space = brake; gamepad left stick, RT/LT, A = brake.
+## Controls: WASD / arrows, Shift = brake; gamepad left stick, RT/LT, A = brake.
 ## No hover/mouse needed (web target).
 
 ## Emitted every physics frame with signed forward speed (m/s); for later HUD/camera.
@@ -61,7 +61,7 @@ func _register_input_actions() -> void:
 	_add_action("tank_back", [_key(KEY_S), _key(KEY_DOWN), _axis(JOY_AXIS_TRIGGER_LEFT, 1.0), _axis(JOY_AXIS_LEFT_Y, 1.0)])
 	_add_action("tank_left", [_key(KEY_A), _key(KEY_LEFT), _axis(JOY_AXIS_LEFT_X, -1.0)])
 	_add_action("tank_right", [_key(KEY_D), _key(KEY_RIGHT), _axis(JOY_AXIS_LEFT_X, 1.0)])
-	_add_action("tank_brake", [_key(KEY_SPACE), _button(JOY_BUTTON_A)])
+	_add_action("tank_brake", [_key(KEY_SHIFT), _button(JOY_BUTTON_A)])
 
 
 func _add_action(action: StringName, events: Array[InputEvent]) -> void:

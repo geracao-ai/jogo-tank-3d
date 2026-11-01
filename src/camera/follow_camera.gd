@@ -5,7 +5,10 @@ extends Camera3D
 ## Follows the target's HEADING, not its velocity, so reversing does not swing the camera:
 ## the tank backs up toward the camera and the view keeps facing the same way.
 ## Ground: camera Y is clamped to tuning.min_camera_y (above the flat ground by construction).
-## Building collision is story 005; cannon aim is story 003.
+## Walls: a sphere is swept from the tank to the desired position; if a body is in the way
+## (tank excluded) the camera is pulled in, with tuning.collision_margin to spare. Pulling in is
+## immediate, easing back out is smoothed (tuning.release_smoothing), so it does not pop.
+## Story 005 (camera does not cross building walls).
 
 ## Node to follow (the Tank).
 @export var target: Node3D
@@ -13,6 +16,8 @@ extends Camera3D
 @export var tuning: FollowCameraTuning
 
 var _yaw: float = 0.0 # smoothed heading of the camera, radians
+var _clear_fraction: float = 1.0 # 0..1 share of the tank->desired line that is free of walls
+var _sphere: SphereShape3D = SphereShape3D.new()
 
 
 func _ready() -> void:
@@ -25,7 +30,18 @@ func _ready() -> void:
 # Physics tick, same as the tank, so the target never moves between camera updates.
 func _physics_process(delta: float) -> void:
 	_yaw = lerp_angle(_yaw, target.global_rotation.y, 1.0 - exp(-tuning.rotation_smoothing * delta))
-	global_position = global_position.lerp(_desired_position(), 1.0 - exp(-tuning.position_smoothing * delta))
+	var origin: Vector3 = _sweep_origin()
+	var desired: Vector3 = _desired_position()
+	var free: float = _free_fraction(origin, desired)
+	if free < _clear_fraction:
+		_clear_fraction = free
+	else:
+		_clear_fraction = lerpf(_clear_fraction, free, 1.0 - exp(-tuning.release_smoothing * delta))
+	desired = origin.lerp(desired, _clear_fraction)
+	var next: Vector3 = global_position.lerp(desired, 1.0 - exp(-tuning.position_smoothing * delta))
+	# The eased path can still cut a corner: never let the final position be behind a wall.
+	next = origin.lerp(next, _free_fraction(origin, next))
+	global_position = next
 	global_position.y = maxf(global_position.y, tuning.min_camera_y)
 	_aim()
 
@@ -37,6 +53,26 @@ func _desired_position() -> Vector3:
 	pos.y = target.global_position.y + tuning.height
 	pos.y = maxf(pos.y, tuning.min_camera_y)
 	return pos
+
+
+## Point on the tank the camera is swept from (aim height).
+func _sweep_origin() -> Vector3:
+	return target.global_position + Vector3.UP * tuning.look_height
+
+
+## Fraction (0..1) of the line from -> to that a sphere of collision_margin radius can travel
+## before touching a body other than the target.
+func _free_fraction(from: Vector3, to: Vector3) -> float:
+	_sphere.radius = tuning.collision_margin
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = _sphere
+	query.transform = Transform3D(Basis.IDENTITY, from)
+	query.motion = to - from
+	query.collision_mask = tuning.collision_mask
+	if target is CollisionObject3D:
+		query.exclude = [(target as CollisionObject3D).get_rid()]
+	var result: PackedFloat32Array = get_world_3d().direct_space_state.cast_motion(query)
+	return result[0] if result.size() > 0 else 1.0
 
 
 func _aim() -> void:

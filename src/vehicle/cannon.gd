@@ -6,7 +6,7 @@ extends Node3D
 ## Aim: each physics tick a ray from the active camera through the mouse position; the first
 ## hit is the aim point (or a point aim_ray_length away). The barrel turns toward it at
 ## tuning.turn_speed, so the shot follows the BARREL, which may lag the cursor.
-## Controls: left mouse button / gamepad right shoulder. Read in _physics_process, so a paused
+## Controls: left mouse button / Space / gamepad right shoulder. Read in _physics_process, so a paused
 ## tree never fires.
 
 ## Re-emitted from every projectile this cannon fired, so a listener (story 004) connects once
@@ -63,9 +63,17 @@ func _aim(point: Vector3, delta: float) -> void:
 
 func _fire() -> void:
 	_cooldown = tuning.reload_interval
+	var exclude: Array[RID] = [_tank.get_rid()]
+	# The barrel can poke through a wall the tank touches, and a shell's ray starting inside a
+	# body misses it, so the shot resolves here when something is between pivot and muzzle.
+	var query := PhysicsRayQueryParameters3D.create(_pitch.global_position, _muzzle.global_position)
+	query.exclude = exclude
+	var hit: Dictionary = get_world_3d().direct_space_state.intersect_ray(query)
+	if not hit.is_empty():
+		projectile_impacted.emit(hit.position, hit.normal, hit.collider)
+		return
 	var shell: Projectile = projectile_scene.instantiate()
 	get_tree().current_scene.add_child(shell)
-	var exclude: Array[RID] = [_tank.get_rid()]
 	shell.launch(_muzzle.global_position, -_muzzle.global_basis.z * tuning.projectile_speed, tuning, exclude)
 	shell.impacted.connect(projectile_impacted.emit)
 
@@ -77,6 +85,9 @@ func _register_input_actions() -> void:
 	var mouse := InputEventMouseButton.new()
 	mouse.button_index = MOUSE_BUTTON_LEFT
 	InputMap.action_add_event("cannon_fire", mouse)
+	var key := InputEventKey.new()
+	key.physical_keycode = KEY_SPACE
+	InputMap.action_add_event("cannon_fire", key)
 	var pad := InputEventJoypadButton.new()
 	pad.button_index = JOY_BUTTON_RIGHT_SHOULDER
 	InputMap.action_add_event("cannon_fire", pad)

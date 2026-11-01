@@ -1,12 +1,12 @@
 # Story 004: Destruição em estágios
 
 > **Epic**: porto-sereno
-> **Status**: Ready
+> **Status**: Complete
 > **Layer**: N/A (minimal)
 > **Type**: Integration
 > **Estimate**: L
 > **Manifest Version**: N/A (minimal — no control manifest)
-> **Last Updated**: [set by /dev-story when implementation begins]
+> **Last Updated**: 2026-10-31
 
 ## Context
 
@@ -57,11 +57,11 @@
 ## Files
 
 - `src/destruction/destructible.gd`
+- `src/destruction/destructible_tuning.gd`
 - `src/destruction/destructible_tuning.tres`
+- `src/destruction/destruction_router.gd`
 - `src/test_levels/single_building.tscn`
-- `tests/integration/destruction/destruction_stages_test.gd`
-
----
+- `src/vehicle/cannon.gd`
 
 ## QA Test Cases
 
@@ -82,3 +82,10 @@
 
 - Depends on: `production/epics/porto-sereno/story-003-canhao-mira-disparo.md`
 - Unlocks: `production/epics/porto-sereno/story-005-cidade-costeira-completa.md`, `production/epics/porto-sereno/story-006-marcas-permanentes.md`
+
+## Completion Notes
+**Completed**: 2026-10-31
+**Criteria**: 8/8 passing. AC-8 measured on a release Web build with one building: Android Chrome 156 at 60.0 to 60.1 fps (seemingly capped by the display; 25 of 480 frames over 20 ms in the intact stage), Mac M1 Pro in Chromium at 84 to 120 fps with one unexplained 372.8 ms stall. The destructible is proven on one building only.
+**Deviations**: ADVISORY — `src/vehicle/cannon.gd` (story 003) changed here twice with the developer's approval: point-blank shots resolve between pivot and muzzle, and Space fires; a mistyped `<Stage>Collision` shape name disables that shape silently; nothing enforces `hits_to_destroyed` above `hits_to_damaged`. OUT OF SCOPE — `src/vehicle/tank.gd` (brake moved to Shift) and `project.yaml` (`commands.build`) changed beyond the Files list; `export_presets.cfg` is gitignored, so a fresh clone must recreate it.
+**Test Evidence**: waived at qa.level minimal; screenshots and `web-fps-android.json`, `web-fps-report.json` in `production/qa/evidence/story-004-destruicao-em-estagios/`; the stamp shows `src/vehicle/cannon.gd` changed after capture
+**Reviewed by**: self, no independent review

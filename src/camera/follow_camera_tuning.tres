@@ -11,3 +11,6 @@ look_ahead = 6.0
 position_smoothing = 6.0
 rotation_smoothing = 3.5
 min_camera_y = 1.0
+collision_margin = 0.5
+release_smoothing = 2.5
+collision_mask = 1

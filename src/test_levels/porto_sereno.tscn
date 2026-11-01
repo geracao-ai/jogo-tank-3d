@@ -1,0 +1,52 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="PackedScene" path="res://src/vehicle/tank.tscn" id="1"]
+[ext_resource type="Script" path="res://src/camera/follow_camera.gd" id="2"]
+[ext_resource type="Resource" path="res://src/camera/follow_camera_tuning.tres" id="3"]
+[ext_resource type="Script" path="res://src/ui/crosshair.gd" id="4"]
+[ext_resource type="Script" path="res://src/destruction/destruction_router.gd" id="5"]
+[ext_resource type="Script" path="res://src/world/city_builder.gd" id="6"]
+
+[sub_resource type="Environment" id="env"]
+background_mode = 1
+background_color = Color(0.6, 0.65, 0.7, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.7, 0.7, 0.7, 1)
+
+[node name="PortoSereno" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("env")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.7071, 0.7071, 0, -0.7071, 0.7071, 0, 10, 0)
+
+[node name="City" type="Node3D" parent="." node_paths=PackedStringArray("tank")]
+script = ExtResource("6")
+tank = NodePath("../Tank")
+
+[node name="Tank" parent="." instance=ExtResource("1")]
+
+[node name="DestructionRouter" type="Node" parent="." node_paths=PackedStringArray("cannon")]
+script = ExtResource("5")
+cannon = NodePath("../Tank/Cannon")
+
+[node name="FollowCamera" type="Camera3D" parent="." node_paths=PackedStringArray("target")]
+transform = Transform3D(1, 0, 0, 0, 0.8192, 0.5736, 0, -0.5736, 0.8192, 0, 5, 9)
+fov = 60.0
+far = 400.0
+script = ExtResource("2")
+target = NodePath("../Tank")
+tuning = ExtResource("3")
+
+[node name="Hud" type="CanvasLayer" parent="."]
+
+[node name="Crosshair" type="Control" parent="Hud"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4")

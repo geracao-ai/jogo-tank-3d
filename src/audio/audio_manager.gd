@@ -11,6 +11,9 @@ extends Node
 ## on the first key, mouse, touch or gamepad press instead of at load. Elsewhere it starts at
 ## once. Mute is the Master bus mute, so it does not depend on any on-screen control.
 ## Desktop key: M (action "audio_mute").
+## Background: while the game is in the background (window unfocused, app paused, or on Web the
+## page hidden by a tab or app switch) the Master bus is silenced too, separately from the
+## player's mute, so returning restores whatever mute state the player had chosen.
 
 ## Emitted when the mute state changes.
 signal mute_changed(muted: bool)
@@ -34,6 +37,10 @@ var _next_voice: int = 0
 var _shot: AudioStream
 var _explosion: AudioStream
 var _unlocked: bool = false
+var _user_muted: bool = false
+var _backgrounded: bool = false
+## Kept referenced so the JavaScript callback is not freed while the listener is registered.
+var _js_visibility_cb: JavaScriptObject
 
 
 func _ready() -> void:
@@ -56,23 +63,47 @@ func _ready() -> void:
 	cannon.fired.connect(_play_one_shot.bind(_shot, tuning.shot_db))
 	cannon.projectile_impacted.connect(_on_projectile_impacted)
 
+	_user_muted = AudioServer.is_bus_mute(0)
 	if OS.has_feature("web"):
 		wait_for_gesture = true
+		var document: JavaScriptObject = JavaScriptBridge.get_interface("document")
+		_js_visibility_cb = JavaScriptBridge.create_callback(_on_web_visibility_changed)
+		document.addEventListener("visibilitychange", _js_visibility_cb)
 	if not wait_for_gesture:
 		_unlock()
 
 
-## True while sound is muted.
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_APPLICATION_PAUSED:
+			set_backgrounded(true)
+		NOTIFICATION_APPLICATION_FOCUS_IN, NOTIFICATION_APPLICATION_RESUMED:
+			set_backgrounded(false)
+
+
+## True while the player has muted sound (ignores the background silence).
 func is_muted() -> bool:
-	return AudioServer.is_bus_mute(0)
+	return _user_muted
 
 
 ## Mutes or unmutes everything (Master bus) and emits mute_changed on a change.
 func set_muted(muted: bool) -> void:
-	if muted == is_muted():
+	if muted == _user_muted:
 		return
-	AudioServer.set_bus_mute(0, muted)
+	_user_muted = muted
+	_apply_bus_mute()
 	mute_changed.emit(muted)
+
+
+## Silences the Master bus while the game is in the background; independent of the player's mute.
+func set_backgrounded(value: bool) -> void:
+	_backgrounded = value
+	_apply_bus_mute()
+
+
+## True while the game is considered in the background.
+func is_backgrounded() -> bool:
+	return _backgrounded
 
 
 ## Flips the mute state.
@@ -122,6 +153,14 @@ func _unhandled_input(event: InputEvent) -> void:
 func _process(delta: float) -> void:
 	_engine_level = lerpf(_engine_level, _speed_ratio, 1.0 - exp(-tuning.engine_response * delta))
 	_apply_engine_level()
+
+
+func _apply_bus_mute() -> void:
+	AudioServer.set_bus_mute(0, _user_muted or _backgrounded)
+
+
+func _on_web_visibility_changed(_args: Array) -> void:
+	set_backgrounded(bool(JavaScriptBridge.eval("document.hidden", true)))
 
 
 func _unlock() -> void:

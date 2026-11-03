@@ -5,6 +5,7 @@ config_version=5
 config/name="Porto Sereno"
 run/main_scene="res://src/test_levels/porto_sereno.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
+config/icon="res://icon.svg"
 
 [input_devices]
 
